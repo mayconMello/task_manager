@@ -1,6 +1,6 @@
 name: Run E2E Tests
 
-on: [ push ]
+on: [ pull_request ]
 
 jobs:
   run-e2e-test:
@@ -37,9 +37,9 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest -v -s app/tests/use_cases/
+          poetry run pytest -v -s app/tests/http/
         env:
           ENVIRONMENT: test
-          JWT_SECRET: testing
+          SECRET_KEY: testing
           DATABASE_URL: "postgresql://docker:docker@localhost:5432/taskmanager"
           DATABASE_URL_TEST: "postgresql://docker:docker@localhost:5432/taskmanager_test"

@@ -1,6 +1,6 @@
 name: Run Unit Tests
 
-on: [ pull_request ]
+on: [ push ]
 
 jobs:
   run-unit-tests:
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest -v -s app/tests/http/
+          poetry run pytest -v -s app/tests/use_cases/
         env:
           ENVIRONMENT: test
           SECRET_KEY: taskmanager-app
