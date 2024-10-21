@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d071e5bc-7179-4c24-ae87-840d4e3a81a4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/.run-e2e-tests.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/.run-e2e-tests.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/run-unit-tests.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/run-unit-tests.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/core/configs.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/configs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +131,7 @@
       <workItem from="1729263487689" duration="2405000" />
       <workItem from="1729266116856" duration="14805000" />
       <workItem from="1729512616616" duration="15339000" />
-      <workItem from="1729530947829" duration="11428000" />
+      <workItem from="1729530947829" duration="11853000" />
     </task>
     <servers />
   </component>

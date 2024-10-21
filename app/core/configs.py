@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     max_file_size_bytes: int = 5 * 1024 * 1024
 
     database_url: str
-    database_url_test: str
+    database_url_test: str = None
 
     secret_key: str
 
