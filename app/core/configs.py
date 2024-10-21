@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     database_url: str
     database_url_test: str = None
 
-    secret_key: str
+    secret_key: str = 'taskmanager-test'
 
     jwt_expires_token_in_minutes: int = 10
     jwt_expires_refresh_token_in_days: int = 7
