@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/taskmanager</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="taskmanager_test@localhost" uuid="a8c9e591-18ff-42f2-8d8a-65d4b3e73fd9">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5433/taskmanager_test</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
