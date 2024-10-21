@@ -43,6 +43,7 @@ async def user(
             )
         )
     )
+    repository_user.items[0].role = 'ADMIN'
     return user
 
 

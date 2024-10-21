@@ -12,7 +12,6 @@ class OverrideUser(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
     password: Optional[str] = None
-    role: Optional[Literal['ADMIN', 'MEMBER']] = 'MEMBER'
 
 
 def make_user(override: OverrideUser = OverrideUser()) -> UserCreate:
@@ -20,5 +19,4 @@ def make_user(override: OverrideUser = OverrideUser()) -> UserCreate:
         name=override.name or fake.name(),
         email=override.email or fake.email(),
         password=override.password or fake.password(),
-        role=override.role or 'MEMBER'
     )
