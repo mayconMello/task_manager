@@ -10,7 +10,7 @@ jobs:
       db:
         image: bitnami/postgresql
         ports:
-          - 5432:5432
+          - 5433:5432
         env:
           POSTGRESQL_USERNAME: docker
           POSTGRESQL_PASSWORD: docker
@@ -41,5 +41,5 @@ jobs:
         env:
           ENVIRONMENT: test
           SECRET_KEY: testing
-          DATABASE_URL: "postgresql://docker:docker@localhost:5432/taskmanager"
-          DATABASE_URL_TEST: "postgresql://docker:docker@localhost:5432/taskmanager_test"
+          DATABASE_URL: "postgresql+asyncpg://docker:docker@localhost:5432/taskmanager"
+          DATABASE_URL_TEST: "postgresql+asyncpg://docker:docker@localhost:5433/taskmanager_test"
