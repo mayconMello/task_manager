@@ -13,24 +13,22 @@ from app.domain.errors import (
     UserAlreadyExists,
     MaxFileSizeError,
     InvalidCredentialsError,
-    OperationNotAllowedError
+    OperationNotAllowedError,
 )
 from app.http.api import routers as api_routers
 
 app = FastAPI()
 
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=settings.allowed_hosts
-)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"], )
+    allow_headers=["*"],
+)
 
-if settings.environment == 'prd':
+if settings.environment == "prd":
     app.add_middleware(HTTPSRedirectMiddleware)
 
 app.include_router(api_routers.router)
@@ -38,7 +36,7 @@ app.include_router(api_routers.router)
 app.mount(
     f"/{settings.storage_url}/",
     StaticFiles(directory=settings.storage_path),
-    name=settings.storage_url
+    name=settings.storage_url,
 )
 
 
@@ -62,5 +60,5 @@ async def process_exceptions(request: Request, call_next):
         print(traceback.format_exc())
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={"detail": 'Internal server error'},
+            content={"detail": "Internal server error"},
         )

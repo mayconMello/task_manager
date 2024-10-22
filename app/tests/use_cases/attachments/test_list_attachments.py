@@ -1,10 +1,14 @@
 import pytest
 import pytest_asyncio
-from app.domain.use_cases.attachments.list import ListAttachmentsUseCase
 
 from app.domain.errors import ResourceNotFoundError
-from app.infra.repositories.in_memory.in_memory_attachment_repository import InMemoryAttachmentRepository
-from app.infra.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
+from app.domain.use_cases.attachments.list import ListAttachmentsUseCase
+from app.infra.repositories.in_memory.in_memory_attachment_repository import (
+    InMemoryAttachmentRepository,
+)
+from app.infra.repositories.in_memory.in_memory_task_repository import (
+    InMemoryTaskRepository,
+)
 from app.utils.tests.make_attachment import make_attachment, OverrideAttachment
 from app.utils.tests.make_task import make_task
 
@@ -21,32 +25,23 @@ def repository_task():
 
 @pytest.fixture
 def use_case(
-        repository: InMemoryAttachmentRepository,
-        repository_task: InMemoryTaskRepository,
+    repository: InMemoryAttachmentRepository,
+    repository_task: InMemoryTaskRepository,
 ):
-    return ListAttachmentsUseCase(
-        repository,
-        repository_task
-    )
+    return ListAttachmentsUseCase(repository, repository_task)
 
 
 @pytest_asyncio.fixture
 async def task(
-        repository_task: InMemoryTaskRepository,
+    repository_task: InMemoryTaskRepository,
 ):
-    task = await repository_task.create(
-        make_task()
-    )
+    task = await repository_task.create(make_task())
 
     return task
 
 
 @pytest.mark.asyncio
-async def test_list_attachments(
-        repository: InMemoryAttachmentRepository,
-        use_case: ListAttachmentsUseCase,
-        task
-):
+async def test_list_attachments(repository: InMemoryAttachmentRepository, use_case: ListAttachmentsUseCase, task):
     attachment = await repository.create(
         make_attachment(
             OverrideAttachment(
@@ -54,9 +49,7 @@ async def test_list_attachments(
             )
         )
     )
-    await repository.create(
-        make_attachment()
-    )
+    await repository.create(make_attachment())
 
     attachments = await use_case.execute(
         task.user_id,
@@ -69,14 +62,9 @@ async def test_list_attachments(
 
 @pytest.mark.asyncio
 async def test_list_attachments_with_invalid_task_id(
-        repository: InMemoryAttachmentRepository,
-        use_case: ListAttachmentsUseCase,
-        task
+    repository: InMemoryAttachmentRepository, use_case: ListAttachmentsUseCase, task
 ):
     with pytest.raises(ResourceNotFoundError):
-        await use_case.execute(
-            task.user_id,
-            'invalid-task-id'
-        )
+        await use_case.execute(task.user_id, "invalid-task-id")
 
     assert len(repository.items) == 0

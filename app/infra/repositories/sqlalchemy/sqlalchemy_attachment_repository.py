@@ -11,8 +11,8 @@ from app.infra.repositories.attachment_repository import AttachmentRepository
 
 class SQLAlchemyAttachmentRepository(AttachmentRepository):
     def __init__(
-            self,
-            session: AsyncSession,
+        self,
+        session: AsyncSession,
     ):
         self.session = session
 
@@ -31,9 +31,13 @@ class SQLAlchemyAttachmentRepository(AttachmentRepository):
         return Attachment.model_validate(attachment_db)
 
     async def delete(self, task_id: UUID4, attachment_id: UUID4):
-        query = select(AttachmentModel).where(
-            AttachmentModel.task_id == task_id,
-        ).where(AttachmentModel.id == attachment_id)
+        query = (
+            select(AttachmentModel)
+            .where(
+                AttachmentModel.task_id == task_id,
+            )
+            .where(AttachmentModel.id == attachment_id)
+        )
         result = await self.session.execute(query)
 
         attachment = result.scalar()
@@ -42,9 +46,13 @@ class SQLAlchemyAttachmentRepository(AttachmentRepository):
         await self.session.commit()
 
     async def get(self, task_id: UUID4, attachment_id: UUID4) -> Attachment | None:
-        query = select(AttachmentModel).where(
-            AttachmentModel.task_id == task_id,
-        ).where(AttachmentModel.id == attachment_id)
+        query = (
+            select(AttachmentModel)
+            .where(
+                AttachmentModel.task_id == task_id,
+            )
+            .where(AttachmentModel.id == attachment_id)
+        )
         result = await self.session.execute(query)
 
         attachment = result.scalar_one_or_none()

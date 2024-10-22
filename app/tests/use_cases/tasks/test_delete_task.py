@@ -4,8 +4,12 @@ import pytest_asyncio
 from app.domain.entities.user import User
 from app.domain.errors import ResourceNotFoundError
 from app.domain.use_cases.tasks.delete import DeleteTaskUseCase
-from app.infra.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
-from app.infra.repositories.in_memory.in_memory_user_repository import InMemoryUserRepository
+from app.infra.repositories.in_memory.in_memory_task_repository import (
+    InMemoryTaskRepository,
+)
+from app.infra.repositories.in_memory.in_memory_user_repository import (
+    InMemoryUserRepository,
+)
 from app.utils.tests.make_task import make_task, OverrideTask
 from app.utils.tests.make_user import make_user
 
@@ -22,13 +26,10 @@ def repository_user():
 
 @pytest.fixture
 def use_case(
-        repository: InMemoryTaskRepository,
-        repository_user: InMemoryUserRepository,
+    repository: InMemoryTaskRepository,
+    repository_user: InMemoryUserRepository,
 ):
-    return DeleteTaskUseCase(
-        repository,
-        repository_user
-    )
+    return DeleteTaskUseCase(repository, repository_user)
 
 
 @pytest_asyncio.fixture
@@ -39,16 +40,14 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_delete_task(
-        repository: InMemoryTaskRepository,
-        use_case: DeleteTaskUseCase,
-        user: User
-):
-    task_1 = await repository.create(make_task(
-        OverrideTask(
-            user_id=user.id,
+async def test_delete_task(repository: InMemoryTaskRepository, use_case: DeleteTaskUseCase, user: User):
+    task_1 = await repository.create(
+        make_task(
+            OverrideTask(
+                user_id=user.id,
+            )
         )
-    ))
+    )
     await repository.create(make_task())
 
     await use_case.execute(
@@ -61,19 +60,19 @@ async def test_delete_task(
 
 @pytest.mark.asyncio
 async def test_delete_task_with_invalid_task_id(
-        repository: InMemoryTaskRepository,
-        use_case: DeleteTaskUseCase,
-        user: User
+    repository: InMemoryTaskRepository, use_case: DeleteTaskUseCase, user: User
 ):
-    await repository.create(make_task(
-        OverrideTask(
-            user_id=user.id,
+    await repository.create(
+        make_task(
+            OverrideTask(
+                user_id=user.id,
+            )
         )
-    ))
+    )
 
     with pytest.raises(ResourceNotFoundError):
         await use_case.execute(
-            'invalid-task-id',
+            "invalid-task-id",
             user.id,
         )
 
@@ -82,20 +81,20 @@ async def test_delete_task_with_invalid_task_id(
 
 @pytest.mark.asyncio
 async def test_delete_task_with_invalid_user_id(
-        repository: InMemoryTaskRepository,
-        use_case: DeleteTaskUseCase,
-        user: User
+    repository: InMemoryTaskRepository, use_case: DeleteTaskUseCase, user: User
 ):
-    task = await repository.create(make_task(
-        OverrideTask(
-            user_id=user.id,
+    task = await repository.create(
+        make_task(
+            OverrideTask(
+                user_id=user.id,
+            )
         )
-    ))
+    )
 
     with pytest.raises(ResourceNotFoundError):
         await use_case.execute(
             task.id,
-            'invalid-user-id',
+            "invalid-user-id",
         )
 
     assert len(repository.items) == 1

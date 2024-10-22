@@ -6,7 +6,6 @@ from app.infra.repositories.category_repository import CategoryRepository
 
 
 class InMemoryCategoryRepository(CategoryRepository):
-
     def __init__(self):
         self.items: List[Category] = []
 

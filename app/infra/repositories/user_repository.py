@@ -6,7 +6,6 @@ from app.domain.entities.user import User, UserCreate
 
 
 class UserRepository(ABC):
-
     @abstractmethod
     async def create(self, user: UserCreate) -> User:
         raise NotImplementedError

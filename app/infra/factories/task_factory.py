@@ -9,13 +9,18 @@ from app.domain.use_cases.tasks.list_due_soon import ListTasksDueSoonUseCase
 from app.domain.use_cases.tasks.update import UpdateTaskUseCase
 from app.domain.use_cases.tasks.update_status import UpdateStatusTaskUseCase
 from app.infra.db.session import get_session
-from app.infra.repositories.sqlalchemy.sqlalchemy_subtask_repository import SQLAlchemySubtaskRepository
-from app.infra.repositories.sqlalchemy.sqlalchemy_task_repository import SQLAlchemyTaskRepository
-from app.infra.repositories.sqlalchemy.sqlalchemy_user_repository import SQLAlchemyUserRepository
+from app.infra.repositories.sqlalchemy.sqlalchemy_subtask_repository import (
+    SQLAlchemySubtaskRepository,
+)
+from app.infra.repositories.sqlalchemy.sqlalchemy_task_repository import (
+    SQLAlchemyTaskRepository,
+)
+from app.infra.repositories.sqlalchemy.sqlalchemy_user_repository import (
+    SQLAlchemyUserRepository,
+)
 
 
 class TaskUseCaseFactory:
-
     @staticmethod
     def repositories(session: AsyncSession):
         repository_task = SQLAlchemyTaskRepository(session=session)
@@ -23,69 +28,31 @@ class TaskUseCaseFactory:
 
         return repository_task, repository_user
 
-    def create_task_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> CreateTaskUseCase:
+    def create_task_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateTaskUseCase:
         repositories = self.repositories(session=session)
-        return CreateTaskUseCase(
-            *repositories
-        )
+        return CreateTaskUseCase(*repositories)
 
-    def list_tasks_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> ListTasksUseCase:
+    def list_tasks_use_case(self, session: AsyncSession = Depends(get_session)) -> ListTasksUseCase:
         repositories = self.repositories(session=session)
-        return ListTasksUseCase(
-            *repositories
-        )
+        return ListTasksUseCase(*repositories)
 
-    def list_tasks_due_soon_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> ListTasksDueSoonUseCase:
+    def list_tasks_due_soon_use_case(self, session: AsyncSession = Depends(get_session)) -> ListTasksDueSoonUseCase:
         repositories = self.repositories(session=session)
-        return ListTasksDueSoonUseCase(
-            *repositories
-        )
+        return ListTasksDueSoonUseCase(*repositories)
 
-    def get_task_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> GetTaskUseCase:
+    def get_task_use_case(self, session: AsyncSession = Depends(get_session)) -> GetTaskUseCase:
         repositories = self.repositories(session=session)
-        return GetTaskUseCase(
-            *repositories
-        )
+        return GetTaskUseCase(*repositories)
 
-    def delete_task_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> DeleteTaskUseCase:
+    def delete_task_use_case(self, session: AsyncSession = Depends(get_session)) -> DeleteTaskUseCase:
         repositories = self.repositories(session=session)
-        return DeleteTaskUseCase(
-            *repositories
-        )
+        return DeleteTaskUseCase(*repositories)
 
-    def update_task_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> UpdateTaskUseCase:
+    def update_task_use_case(self, session: AsyncSession = Depends(get_session)) -> UpdateTaskUseCase:
         repositories = self.repositories(session)
-        return UpdateTaskUseCase(
-            *repositories
-        )
+        return UpdateTaskUseCase(*repositories)
 
-    def update_status_task_use_case(
-            self,
-            session: AsyncSession = Depends(get_session)
-    ) -> UpdateStatusTaskUseCase:
+    def update_status_task_use_case(self, session: AsyncSession = Depends(get_session)) -> UpdateStatusTaskUseCase:
         repositories = self.repositories(session)
-        repository_subtask = SQLAlchemySubtaskRepository(
-            session
-        )
-        return UpdateStatusTaskUseCase(
-            *repositories,
-            repository_subtask=repository_subtask
-        )
+        repository_subtask = SQLAlchemySubtaskRepository(session)
+        return UpdateStatusTaskUseCase(*repositories, repository_subtask=repository_subtask)

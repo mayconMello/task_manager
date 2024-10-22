@@ -10,7 +10,7 @@ from app.core.configs import settings
 from app.utils.datetime import get_utc_now
 
 pwd_context = PasswordHash.recommended()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -22,28 +22,16 @@ def get_password_hash(password: str) -> str:
 
 
 def create_jwt_token(sub: UUID4):
-    expire = get_utc_now() + timedelta(
-        minutes=settings.jwt_expires_token_in_minutes
-    )
-    to_encode = {'exp': expire, 'sub': str(sub)}
-    encoded_jwt = encode(
-        to_encode,
-        settings.secret_key,
-        algorithm=settings.jwt_algorithm
-    )
+    expire = get_utc_now() + timedelta(minutes=settings.jwt_expires_token_in_minutes)
+    to_encode = {"exp": expire, "sub": str(sub)}
+    encoded_jwt = encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
     return encoded_jwt
 
 
 def create_jwt_refresh_token(sub: UUID4):
-    expire = get_utc_now() + timedelta(
-        minutes=settings.jwt_expires_refresh_token_in_days
-    )
-    to_encode = {'exp': expire, 'sub': str(sub)}
-    encoded_jwt = encode(
-        to_encode,
-        settings.secret_key,
-        algorithm=settings.jwt_algorithm
-    )
+    expire = get_utc_now() + timedelta(minutes=settings.jwt_expires_refresh_token_in_days)
+    to_encode = {"exp": expire, "sub": str(sub)}
+    encoded_jwt = encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
     return encoded_jwt
 
 
@@ -54,18 +42,18 @@ def decode_token(token: str) -> str:
         algorithms=[settings.jwt_algorithm],
     )
 
-    sub = payload['sub']
+    sub = payload["sub"]
 
     return sub
 
 
 def get_current_user(
-        token: str = Depends(oauth2_scheme),
+    token: str = Depends(oauth2_scheme),
 ) -> str | HTTPException:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail='Could not validate credentials',
-        headers={'WWW-Authenticate': 'Bearer'},
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
     )
 
     sub = decode_token(token)

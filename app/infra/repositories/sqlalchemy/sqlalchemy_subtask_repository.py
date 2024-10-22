@@ -10,7 +10,6 @@ from app.infra.repositories.subtask_repository import SubtaskRepository
 
 
 class SQLAlchemySubtaskRepository(SubtaskRepository):
-
     def __init__(self, session: AsyncSession):
         self.session = session
 
@@ -18,7 +17,7 @@ class SQLAlchemySubtaskRepository(SubtaskRepository):
         db_subtask = SubtaskModel(
             title=subtask.title,
             is_completed=subtask.is_completed,
-            task_id=subtask.task_id
+            task_id=subtask.task_id,
         )
         self.session.add(db_subtask)
         await self.session.commit()
@@ -26,28 +25,15 @@ class SQLAlchemySubtaskRepository(SubtaskRepository):
 
         return Subtask.model_validate(db_subtask)
 
-    async def update_all_status(
-            self,
-            task_id: UUID4,
-            is_completed: bool
-    ):
+    async def update_all_status(self, task_id: UUID4, is_completed: bool):
         await self.session.execute(
-            update(SubtaskModel).where(
-                SubtaskModel.task_id == task_id
-            ).values(is_completed=is_completed)
+            update(SubtaskModel).where(SubtaskModel.task_id == task_id).values(is_completed=is_completed)
         )
         await self.session.commit()
 
-    async def update(
-            self,
-            task_id: UUID4,
-            subtask_id: UUID4,
-            subtask: SubtaskUpdate
-    ) -> Subtask:
+    async def update(self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate) -> Subtask:
         result = await self.session.execute(
-            select(SubtaskModel)
-            .where(SubtaskModel.id == subtask_id)
-            .where(SubtaskModel.task_id == task_id)
+            select(SubtaskModel).where(SubtaskModel.id == subtask_id).where(SubtaskModel.task_id == task_id)
         )
         db_task = result.scalar()
 
@@ -57,16 +43,8 @@ class SQLAlchemySubtaskRepository(SubtaskRepository):
         await self.session.commit()
         return Subtask.model_validate(db_task)
 
-    async def delete(
-            self,
-            task_id: UUID4,
-            subtask_id: UUID4
-    ):
-        query = (
-            select(SubtaskModel)
-            .where(SubtaskModel.id == subtask_id)
-            .where(SubtaskModel.task_id == task_id)
-        )
+    async def delete(self, task_id: UUID4, subtask_id: UUID4):
+        query = select(SubtaskModel).where(SubtaskModel.id == subtask_id).where(SubtaskModel.task_id == task_id)
         result = await self.session.execute(query)
 
         subtask = result.scalar()
@@ -75,11 +53,7 @@ class SQLAlchemySubtaskRepository(SubtaskRepository):
         await self.session.commit()
 
     async def get(self, task_id: UUID4, subtask_id: UUID4) -> Subtask | None:
-        query = (
-            select(SubtaskModel)
-            .where(SubtaskModel.id == subtask_id)
-            .where(SubtaskModel.task_id == task_id)
-        )
+        query = select(SubtaskModel).where(SubtaskModel.id == subtask_id).where(SubtaskModel.task_id == task_id)
         result = await self.session.execute(query)
 
         task = result.scalar_one_or_none()

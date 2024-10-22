@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Optional
 
 from fastapi import Request
@@ -19,10 +18,7 @@ class Attachment(BaseModel):
     file_path: str
     task_id: Optional[UUID4] = None
 
-    model_config = ConfigDict(
-        from_attributes=True,
-        arbitrary_types_allowed=True
-    )
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
     def set_request_context(self, request: Request):
         self.request = request
@@ -31,10 +27,7 @@ class Attachment(BaseModel):
     @property
     def url(self) -> str:
         if self.request is None:
-            return f'/{settings.storage_url}/{self.filename}'
+            return f"/{settings.storage_url}/{self.filename}"
 
-        url = self.request.url_for(
-            settings.storage_url,
-            path=self.filename
-        )
+        url = self.request.url_for(settings.storage_url, path=self.filename)
         return str(url)

@@ -5,7 +5,6 @@ from app.domain.entities.category import Category
 
 
 class CategoryRepository(ABC):
-
     @abstractmethod
     async def create(self, category: Category) -> Category:
         raise NotImplementedError

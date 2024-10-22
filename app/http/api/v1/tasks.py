@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status, Body
+from fastapi import APIRouter, Depends, status
 
 from app.core.auth import get_current_user
 from app.domain.entities.task import Task, TaskUpdateStatus, TaskUpdate, TaskCreate
@@ -18,95 +18,73 @@ router = APIRouter(tags=["Tasks"])
 task_factory = TaskUseCaseFactory()
 
 
-@router.post('/', response_model=Task, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def create(
-        body: TaskCreate,
-        use_case: CreateTaskUseCase = Depends(task_factory.create_task_use_case),
-        current_user_id: str = Depends(get_current_user)
+    body: TaskCreate,
+    use_case: CreateTaskUseCase = Depends(task_factory.create_task_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    task = await use_case.execute(
-        current_user_id,
-        body
-    )
+    task = await use_case.execute(current_user_id, body)
 
     return task
 
 
-@router.get('/', response_model=List[Task])
+@router.get("/", response_model=List[Task])
 async def list_tasks(
-        params: TaskListFilter = Depends(),
-        use_case: ListTasksUseCase = Depends(task_factory.list_tasks_use_case),
-        current_user_id: str = Depends(get_current_user)
+    params: TaskListFilter = Depends(),
+    use_case: ListTasksUseCase = Depends(task_factory.list_tasks_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    tasks = await use_case.execute(
-        current_user_id,
-        params
-    )
+    tasks = await use_case.execute(current_user_id, params)
     return tasks
 
 
-@router.get('/due-soon', response_model=List[Task])
+@router.get("/due-soon", response_model=List[Task])
 async def list_due_soon(
-        use_case: ListTasksDueSoonUseCase = Depends(task_factory.list_tasks_due_soon_use_case),
-        current_user_id: str = Depends(get_current_user)
+    use_case: ListTasksDueSoonUseCase = Depends(task_factory.list_tasks_due_soon_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    tasks = await use_case.execute(
-        current_user_id
-    )
+    tasks = await use_case.execute(current_user_id)
     return tasks
 
 
-@router.get('/{task_id}', response_model=Task)
+@router.get("/{task_id}", response_model=Task)
 async def get(
-        task_id: str,
-        use_case: GetTaskUseCase = Depends(task_factory.get_task_use_case),
-        current_user_id: str = Depends(get_current_user)
+    task_id: str,
+    use_case: GetTaskUseCase = Depends(task_factory.get_task_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    task = await use_case.execute(
-        task_id,
-        current_user_id
-    )
+    task = await use_case.execute(task_id, current_user_id)
 
     return task
 
 
-@router.delete('/{task_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete(
-        task_id: str,
-        use_case: DeleteTaskUseCase = Depends(task_factory.delete_task_use_case),
-        current_user_id: str = Depends(get_current_user)
+    task_id: str,
+    use_case: DeleteTaskUseCase = Depends(task_factory.delete_task_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    await use_case.execute(
-        task_id,
-        current_user_id
-    )
+    await use_case.execute(task_id, current_user_id)
 
 
-@router.put('/{task_id}', response_model=Task)
+@router.put("/{task_id}", response_model=Task)
 async def update(
-        task_id: str,
-        body: TaskUpdate,
-        use_case: UpdateTaskUseCase = Depends(task_factory.update_task_use_case),
-        current_user_id: str = Depends(get_current_user)
+    task_id: str,
+    body: TaskUpdate,
+    use_case: UpdateTaskUseCase = Depends(task_factory.update_task_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    task = await use_case.execute(
-        task_id,
-        current_user_id,
-        body
-    )
+    task = await use_case.execute(task_id, current_user_id, body)
     return task
 
 
-@router.patch('/{task_id}', response_model=Task)
+@router.patch("/{task_id}", response_model=Task)
 async def update_status(
-        task_id: str,
-        body: TaskUpdateStatus,
-        use_case: UpdateStatusTaskUseCase = Depends(task_factory.update_status_task_use_case),
-        current_user_id: str = Depends(get_current_user)
+    task_id: str,
+    body: TaskUpdateStatus,
+    use_case: UpdateStatusTaskUseCase = Depends(task_factory.update_status_task_use_case),
+    current_user_id: str = Depends(get_current_user),
 ):
-    task = await use_case.execute(
-        task_id,
-        current_user_id,
-        is_completed=body.is_completed
-    )
+    task = await use_case.execute(task_id, current_user_id, is_completed=body.is_completed)
     return task

@@ -7,9 +7,9 @@ from app.infra.repositories.user_repository import UserRepository
 
 class ListCategoriesUseCase:
     def __init__(
-            self,
-            repository: CategoryRepository,
-            repository_user=UserRepository,
+        self,
+        repository: CategoryRepository,
+        repository_user=UserRepository,
     ):
         self.repository = repository
         self.repository_user = repository_user

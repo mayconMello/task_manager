@@ -18,14 +18,11 @@ class Token(BaseModel):
     access_token: str
 
 
-@router.post(
-    '/',
-    response_model=Token
-)
+@router.post("/", response_model=Token)
 async def create_session(
-        response: Response,
-        body: Authenticate,
-        use_case: AuthenticateUseCase = Depends(session_factory.authenticate_use_case)
+    response: Response,
+    body: Authenticate,
+    use_case: AuthenticateUseCase = Depends(session_factory.authenticate_use_case),
 ):
     user = await use_case.execute(body)
 
@@ -46,12 +43,12 @@ async def create_session(
 
 
 @router.post(
-    '/refresh',
+    "/refresh",
 )
 async def refresh_session(
-        response: Response,
-        refresh_token: str = Cookie(None),
-        use_case: GetUserByIdUseCase = Depends(user_factory.get_user_by_id_use_case)
+    response: Response,
+    refresh_token: str = Cookie(None),
+    use_case: GetUserByIdUseCase = Depends(user_factory.get_user_by_id_use_case),
 ):
     sub = decode_token(refresh_token)
 

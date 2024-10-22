@@ -1,9 +1,9 @@
-from typing import Optional, Literal
+from typing import Optional
 
 from faker import Faker
 from pydantic import BaseModel
 
-from app.domain.entities.user import User, UserCreate
+from app.domain.entities.user import UserCreate
 
 fake = Faker()
 

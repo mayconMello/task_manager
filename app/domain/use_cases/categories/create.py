@@ -1,5 +1,3 @@
-from pydantic.v1 import UUID4
-
 from app.domain.entities.category import Category
 from app.domain.errors import ResourceNotFoundError, OperationNotAllowedError
 from app.infra.repositories.category_repository import CategoryRepository
@@ -8,9 +6,9 @@ from app.infra.repositories.user_repository import UserRepository
 
 class CreateCategoryUseCase:
     def __init__(
-            self,
-            repository: CategoryRepository,
-            repository_user: UserRepository,
+        self,
+        repository: CategoryRepository,
+        repository_user: UserRepository,
     ):
         self.repository = repository
         self.repository_user = repository_user
@@ -21,7 +19,7 @@ class CreateCategoryUseCase:
         if not user:
             raise ResourceNotFoundError()
 
-        if user.role != 'ADMIN':
+        if user.role != "ADMIN":
             raise OperationNotAllowedError()
 
         category = await self.repository.create(body)

@@ -11,6 +11,4 @@ class Comment(BaseModel):
     task_id: Optional[UUID4] = None
     user_id: Optional[UUID4] = None
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

@@ -1,8 +1,10 @@
 import pytest
-from app.domain.use_cases.categories.list import ListCategoriesUseCase
 
 from app.domain.entities.category import Category
-from app.infra.repositories.in_memory.in_memory_category_repository import InMemoryCategoryRepository
+from app.domain.use_cases.categories.list import ListCategoriesUseCase
+from app.infra.repositories.in_memory.in_memory_category_repository import (
+    InMemoryCategoryRepository,
+)
 
 
 @pytest.fixture
@@ -16,12 +18,9 @@ def use_case(repository: InMemoryCategoryRepository):
 
 
 @pytest.mark.asyncio
-async def test_list_categories(
-        use_case: ListCategoriesUseCase,
-        repository: InMemoryCategoryRepository
-):
-    category_1 = Category(name='Category 1')
-    category_2 = Category(name='Category 2')
+async def test_list_categories(use_case: ListCategoriesUseCase, repository: InMemoryCategoryRepository):
+    category_1 = Category(name="Category 1")
+    category_2 = Category(name="Category 2")
 
     await repository.create(category_1)
     await repository.create(category_2)
@@ -31,5 +30,5 @@ async def test_list_categories(
     assert len(items) == 2
 
     assert items == repository.items
-    assert items[0].name == 'Category 1'
-    assert items[1].name == 'Category 2'
+    assert items[0].name == "Category 1"
+    assert items[1].name == "Category 2"

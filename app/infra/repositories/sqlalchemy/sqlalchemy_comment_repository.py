@@ -27,9 +27,13 @@ class SQLAlchemyCommentRepository(CommentRepository):
         return Comment.model_validate(comment_db)
 
     async def delete(self, task_id: UUID4, comment_id: UUID4):
-        query = select(CommentModel).where(
-            CommentModel.task_id == task_id,
-        ).where(CommentModel.id == comment_id)
+        query = (
+            select(CommentModel)
+            .where(
+                CommentModel.task_id == task_id,
+            )
+            .where(CommentModel.id == comment_id)
+        )
         result = await self.session.execute(query)
 
         comment = result.scalar()
@@ -38,9 +42,13 @@ class SQLAlchemyCommentRepository(CommentRepository):
         await self.session.commit()
 
     async def get(self, task_id: UUID4, comment_id: UUID4) -> Comment | None:
-        query = select(CommentModel).where(
-            CommentModel.task_id == task_id,
-        ).where(CommentModel.id == comment_id)
+        query = (
+            select(CommentModel)
+            .where(
+                CommentModel.task_id == task_id,
+            )
+            .where(CommentModel.id == comment_id)
+        )
         result = await self.session.execute(query)
 
         comment = result.scalar_one_or_none()

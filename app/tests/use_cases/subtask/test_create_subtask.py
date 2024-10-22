@@ -4,8 +4,12 @@ from pydantic import ValidationError
 
 from app.domain.errors import ResourceNotFoundError
 from app.domain.use_cases.subtasks.create import CreateSubtaskUseCase
-from app.infra.repositories.in_memory.in_memory_subtask_repository import InMemorySubtaskRepository
-from app.infra.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
+from app.infra.repositories.in_memory.in_memory_subtask_repository import (
+    InMemorySubtaskRepository,
+)
+from app.infra.repositories.in_memory.in_memory_task_repository import (
+    InMemoryTaskRepository,
+)
 from app.utils.tests.make_subtask import make_subtask, OverrideSubtask
 from app.utils.tests.make_task import make_task
 
@@ -22,32 +26,23 @@ def repository_task():
 
 @pytest.fixture
 def use_case(
-        repository: InMemorySubtaskRepository,
-        repository_task: InMemoryTaskRepository,
+    repository: InMemorySubtaskRepository,
+    repository_task: InMemoryTaskRepository,
 ):
-    return CreateSubtaskUseCase(
-        repository,
-        repository_task
-    )
+    return CreateSubtaskUseCase(repository, repository_task)
 
 
 @pytest_asyncio.fixture
 async def task(
-        repository_task: InMemoryTaskRepository,
+    repository_task: InMemoryTaskRepository,
 ):
-    task = await repository_task.create(
-        make_task()
-    )
+    task = await repository_task.create(make_task())
 
     return task
 
 
 @pytest.mark.asyncio
-async def test_create_subtask(
-        repository: InMemorySubtaskRepository,
-        use_case: CreateSubtaskUseCase,
-        task
-):
+async def test_create_subtask(repository: InMemorySubtaskRepository, use_case: CreateSubtaskUseCase, task):
     subtask = await use_case.execute(
         task.user_id,
         task.id,
@@ -55,7 +50,7 @@ async def test_create_subtask(
             OverrideSubtask(
                 task_id=task.id,
             )
-        )
+        ),
     )
 
     assert len(repository.items) == 1
@@ -64,25 +59,17 @@ async def test_create_subtask(
 
 @pytest.mark.asyncio
 async def test_create_subtask_with_invalid_task_id(
-        repository: InMemorySubtaskRepository,
-        use_case: CreateSubtaskUseCase,
-        task
+    repository: InMemorySubtaskRepository, use_case: CreateSubtaskUseCase, task
 ):
     with pytest.raises(ResourceNotFoundError):
-        await use_case.execute(
-            task.user_id,
-            'invalid-task_id',
-            make_subtask()
-        )
+        await use_case.execute(task.user_id, "invalid-task_id", make_subtask())
 
     assert len(repository.items) == 0
 
 
 @pytest.mark.asyncio
 async def test_create_subtask_with_invalid_title(
-        repository: InMemorySubtaskRepository,
-        use_case: CreateSubtaskUseCase,
-        task
+    repository: InMemorySubtaskRepository, use_case: CreateSubtaskUseCase, task
 ):
     with pytest.raises(ValidationError):
         await use_case.execute(
@@ -90,10 +77,10 @@ async def test_create_subtask_with_invalid_title(
             task.id,
             make_subtask(
                 OverrideSubtask(
-                    title='A' * 101,
+                    title="A" * 101,
                     task_id=task.id,
                 )
-            )
+            ),
         )
 
     assert len(repository.items) == 0

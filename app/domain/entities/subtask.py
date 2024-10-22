@@ -9,15 +9,11 @@ class Subtask(BaseModel):
     is_completed: bool = False
     task_id: Optional[UUID4] = None
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SubtaskUpdate(BaseModel):
     title: str = Field(max_length=100)
     is_completed: bool = False
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

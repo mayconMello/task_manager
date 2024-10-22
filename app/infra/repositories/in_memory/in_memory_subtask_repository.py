@@ -8,7 +8,6 @@ from app.infra.repositories.subtask_repository import SubtaskRepository
 
 
 class InMemorySubtaskRepository(SubtaskRepository):
-
     def __init__(self):
         self.items: List[Subtask] = []
 
@@ -19,11 +18,7 @@ class InMemorySubtaskRepository(SubtaskRepository):
         return subtask
 
     async def list(self, task_id: UUID4) -> List[Subtask]:
-        subtasks = [
-            subtask
-            for subtask in self.items
-            if subtask.task_id == task_id
-        ]
+        subtasks = [subtask for subtask in self.items if subtask.task_id == task_id]
 
         return subtasks
 
@@ -48,11 +43,7 @@ class InMemorySubtaskRepository(SubtaskRepository):
 
                 return item
 
-    async def update_all_status(
-            self,
-            task_id: UUID4,
-            is_completed: bool
-    ):
+    async def update_all_status(self, task_id: UUID4, is_completed: bool):
         for index, item in enumerate(self.items):
             if item.task_id == task_id:
                 item.is_completed = is_completed
