@@ -15,11 +15,7 @@ class AuthenticateUseCase:
         if not user:
             raise InvalidCredentialsError()
 
-
-        is_correct_password = verify_password(
-            body.password,
-            user.password
-        )
+        is_correct_password = verify_password(body.password, user.password)
 
         if not is_correct_password:
             raise InvalidCredentialsError()

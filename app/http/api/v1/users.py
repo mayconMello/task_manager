@@ -9,14 +9,10 @@ router = APIRouter(tags=["Users"])
 user_factory = UserFactory()
 
 
-@router.post(
-    '/',
-    response_model=User,
-    status_code=status.HTTP_201_CREATED
-)
+@router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create(
-        body: UserCreate,
-        use_case: CreateUserUseCase = Depends(user_factory.create_user_use_case)
+    body: UserCreate,
+    use_case: CreateUserUseCase = Depends(user_factory.create_user_use_case),
 ):
     """
     Create a new user.

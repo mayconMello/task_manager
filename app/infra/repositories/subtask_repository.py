@@ -7,7 +7,6 @@ from app.domain.entities.subtask import Subtask, SubtaskUpdate
 
 
 class SubtaskRepository(ABC):
-
     @abstractmethod
     async def create(self, subtask: Subtask) -> Subtask:
         raise NotImplementedError
@@ -25,18 +24,9 @@ class SubtaskRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update(
-            self,
-            task_id: UUID4,
-            subtask_id: UUID4,
-            subtask: SubtaskUpdate
-    ) -> Subtask:
+    async def update(self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate) -> Subtask:
         raise NotImplementedError
 
     @abstractmethod
-    async def update_all_status(
-            self,
-            task_id: UUID4,
-            is_completed: bool
-    ):
+    async def update_all_status(self, task_id: UUID4, is_completed: bool):
         raise NotImplementedError

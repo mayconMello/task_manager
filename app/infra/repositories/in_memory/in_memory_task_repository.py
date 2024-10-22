@@ -9,27 +9,17 @@ from app.infra.repositories.task_repository import TaskRepository
 
 
 class InMemoryTaskRepository(TaskRepository):
-
     def __init__(self):
         self.items: List[Task] = []
 
     async def create(self, task: TaskCreate) -> Task:
-        task_db = Task(
-            **task.model_dump(),
-            id=uuid.uuid4(),
-            created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+        task_db = Task(**task.model_dump(), id=uuid.uuid4(), created_at=datetime.now(), updated_at=datetime.now())
         self.items.append(task_db)
 
         return task_db
 
     async def list(self, user_id: str, params: dict) -> List[Task]:
-        tasks = [
-            item
-            for item in self.items
-            if item.user_id == user_id
-        ]
+        tasks = [item for item in self.items if item.user_id == user_id]
 
         if not params:
             return tasks
@@ -55,17 +45,9 @@ class InMemoryTaskRepository(TaskRepository):
         return filtered_tasks
 
     async def list_due_soon(self, user_id: UUID4, due_time_limit: datetime) -> List[Task]:
-        tasks = [
-            item
-            for item in self.items
-            if item.user_id == user_id
-        ]
+        tasks = [item for item in self.items if item.user_id == user_id]
 
-        tasks_due_soon = [
-            task
-            for task in tasks
-            if task.due_date and task.due_date <= due_time_limit
-        ]
+        tasks_due_soon = [task for task in tasks if task.due_date and task.due_date <= due_time_limit]
 
         return tasks_due_soon
 

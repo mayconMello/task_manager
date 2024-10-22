@@ -4,14 +4,14 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.entities.category import Category
-from app.infra.repositories.sqlalchemy.sqlalchemy_category_repository import SQLAlchemyCategoryRepository
+from app.infra.repositories.sqlalchemy.sqlalchemy_category_repository import (
+    SQLAlchemyCategoryRepository,
+)
 
 
 @pytest_asyncio.fixture
 async def categories(session: AsyncSession):
-    repository = SQLAlchemyCategoryRepository(
-        session
-    )
+    repository = SQLAlchemyCategoryRepository(session)
 
     await repository.create(Category(name="Category 1"))
     await repository.create(Category(name="Category 2"))
@@ -20,11 +20,11 @@ async def categories(session: AsyncSession):
 
 @pytest.mark.asyncio
 async def test_e2e_list_categories(
-        categories,
-        client: AsyncClient,
+    categories,
+    client: AsyncClient,
 ):
     response = await client.get(
-        '/api/v1/categories/',
+        "/api/v1/categories/",
     )
 
     assert response.status_code == 200

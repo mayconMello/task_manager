@@ -4,20 +4,14 @@ from app.infra.repositories.task_repository import TaskRepository
 
 
 class DeleteCommentUseCase:
-    def __init__(
-            self,
-            repository: CommentRepository,
-            repository_task: TaskRepository
-    ):
+    def __init__(self, repository: CommentRepository, repository_task: TaskRepository):
         self.repository = repository
         self.repository_task = repository_task
 
     async def execute(self, user_id: str, task_id: str, comment_id: str):
         task = await self.repository_task.get(user_id, task_id)
         if not task:
-            raise ResourceNotFoundError(
-                "Task not found or you do not have permission to access this task."
-            )
+            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
 
         comment = await self.repository.get(task_id, comment_id)
         if not comment:

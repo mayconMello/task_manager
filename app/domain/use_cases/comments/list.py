@@ -9,24 +9,15 @@ from app.infra.repositories.task_repository import TaskRepository
 
 
 class ListCommentUseCase:
-    def __init__(
-            self,
-            repository: CommentRepository,
-            repository_task: TaskRepository
-    ):
+    def __init__(self, repository: CommentRepository, repository_task: TaskRepository):
         self.repository = repository
         self.repository_task = repository_task
 
     async def execute(self, user_id: UUID4, task_id: UUID4) -> List[Comment]:
-        task = await self.repository_task.get(
-            user_id,
-            task_id
-        )
+        task = await self.repository_task.get(user_id, task_id)
 
         if not task:
-            raise ResourceNotFoundError(
-                "Task not found or you do not have permission to access this task."
-            )
+            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
 
         comments = await self.repository.list(task_id)
 

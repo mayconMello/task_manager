@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 @pytest.mark.asyncio
 async def test_e2_create_user(
-        client: AsyncClient,
+    client: AsyncClient,
 ):
     payload = {
         "name": "Jhon Doe",
@@ -12,10 +12,7 @@ async def test_e2_create_user(
         "password": "ABC123456",
     }
 
-    response = await client.post(
-        "/api/v1/users/",
-        json=payload
-    )
+    response = await client.post("/api/v1/users/", json=payload)
 
     assert response.status_code == 201
     data = response.json()
@@ -26,7 +23,7 @@ async def test_e2_create_user(
 
 @pytest.mark.asyncio
 async def test_e2e_create_user_with_same_email_twice(
-        client: AsyncClient,
+    client: AsyncClient,
 ):
     payload = {
         "name": "Jhon Doe",
@@ -34,14 +31,8 @@ async def test_e2e_create_user_with_same_email_twice(
         "password": "ABC123456",
     }
 
-    await client.post(
-        "/api/v1/users/",
-        json=payload
-    )
+    await client.post("/api/v1/users/", json=payload)
 
-    response = await client.post(
-        "/api/v1/users/",
-        json=payload
-    )
+    response = await client.post("/api/v1/users/", json=payload)
 
     assert response.status_code == 400

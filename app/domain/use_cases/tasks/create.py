@@ -6,9 +6,9 @@ from app.infra.repositories.user_repository import UserRepository
 
 class CreateTaskUseCase:
     def __init__(
-            self,
-            repository: TaskRepository,
-            repository_user: UserRepository,
+        self,
+        repository: TaskRepository,
+        repository_user: UserRepository,
     ):
         self.repository = repository
         self.repository_user = repository_user

@@ -19,11 +19,7 @@ class InMemoryCommentRepository(CommentRepository):
         return comment
 
     async def list(self, task_id: UUID4) -> List[Comment]:
-        comments = [
-            comment
-            for comment in self.items
-            if comment.task_id == task_id
-        ]
+        comments = [comment for comment in self.items if comment.task_id == task_id]
 
         return comments
 

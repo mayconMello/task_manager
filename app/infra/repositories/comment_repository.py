@@ -7,7 +7,6 @@ from app.domain.entities.comment import Comment
 
 
 class CommentRepository(ABC):
-
     @abstractmethod
     async def create(self, comment: Comment) -> Comment:
         raise NotImplementedError

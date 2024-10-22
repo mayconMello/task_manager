@@ -1,10 +1,12 @@
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient, Cookies
+from httpx import AsyncClient
 
 from app.core.auth import get_password_hash
 from app.domain.entities.user import User
-from app.infra.repositories.sqlalchemy.sqlalchemy_user_repository import SQLAlchemyUserRepository
+from app.infra.repositories.sqlalchemy.sqlalchemy_user_repository import (
+    SQLAlchemyUserRepository,
+)
 from app.utils.tests.make_user import make_user, OverrideUser
 
 
@@ -13,8 +15,8 @@ async def user(session):
     repository = SQLAlchemyUserRepository(session)
     user = make_user(
         OverrideUser(
-            email='jhondoe@example.com',
-            password=get_password_hash('ABC123456'),
+            email="jhondoe@example.com",
+            password=get_password_hash("ABC123456"),
         )
     )
     await repository.create(user)
@@ -22,30 +24,25 @@ async def user(session):
 
 
 @pytest.mark.asyncio
-async def test_e2e_refresh_token(
-        client: AsyncClient,
-        user: User
-):
+async def test_e2e_refresh_token(client: AsyncClient, user: User):
     payload = {
-        'email': user.email,
-        'password': 'ABC123456',
+        "email": user.email,
+        "password": "ABC123456",
     }
 
     auth_response = await client.post(
-        '/api/v1/sessions/',
+        "/api/v1/sessions/",
         json=payload,
     )
 
     refresh_token = auth_response.cookies["refresh_token"]
-    client.cookies.set('refresh_token', refresh_token)
-    response = await client.post(
-        '/api/v1/sessions/refresh'
-    )
+    client.cookies.set("refresh_token", refresh_token)
+    response = await client.post("/api/v1/sessions/refresh")
 
     assert response.status_code == 200
     data = response.json()
 
-    assert 'access_token' in data
+    assert "access_token" in data
 
     cookies = response.cookies
-    assert 'refresh_token' in cookies
+    assert "refresh_token" in cookies

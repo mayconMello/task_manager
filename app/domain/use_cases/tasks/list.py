@@ -17,9 +17,9 @@ class TaskListFilter(BaseModel):
 
 class ListTasksUseCase:
     def __init__(
-            self,
-            repository: TaskRepository,
-            repository_user: UserRepository,
+        self,
+        repository: TaskRepository,
+        repository_user: UserRepository,
     ):
         self.repository = repository
         self.repository_user = repository_user
@@ -27,9 +27,7 @@ class ListTasksUseCase:
     async def execute(self, user_id: UUID4, params: TaskListFilter = None) -> List[Task]:
         params = params or TaskListFilter()
 
-        user = await self.repository_user.get_by_id(
-            user_id
-        )
+        user = await self.repository_user.get_by_id(user_id)
 
         if not user:
             raise ResourceNotFoundError()

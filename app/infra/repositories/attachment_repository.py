@@ -7,7 +7,6 @@ from app.domain.entities.attachment import Attachment
 
 
 class AttachmentRepository(ABC):
-
     @abstractmethod
     async def create(self, attachment: Attachment) -> Attachment:
         raise NotImplementedError

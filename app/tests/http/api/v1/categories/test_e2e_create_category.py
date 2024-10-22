@@ -9,27 +9,20 @@ from app.infra.db.models import UserModel
 
 
 @pytest_asyncio.fixture
-async def change_role_user(
-        session: AsyncSession,
-        user: User
-):
-    query = select(
-        UserModel
-    ).where(
-        UserModel.id == user.id
-    )
+async def change_role_user(session: AsyncSession, user: User):
+    query = select(UserModel).where(UserModel.id == user.id)
     result = await session.execute(query)
     user_db = result.scalar()
 
-    user_db.role = 'ADMIN'
+    user_db.role = "ADMIN"
     await session.commit()
 
 
 @pytest.mark.asyncio
 async def test_e2_create_category(
-        client: AsyncClient,
-        change_role_user,
-        bearer_token: str,
+    client: AsyncClient,
+    change_role_user,
+    bearer_token: str,
 ):
     payload = {
         "name": "Test Category",
@@ -38,7 +31,7 @@ async def test_e2_create_category(
     response = await client.post(
         "/api/v1/categories/",
         json=payload,
-        headers={"Authorization": f"Bearer {bearer_token}"}
+        headers={"Authorization": f"Bearer {bearer_token}"},
     )
 
     assert response.status_code == 201
@@ -48,8 +41,8 @@ async def test_e2_create_category(
 
 @pytest.mark.asyncio
 async def test_e2_create_category_with_member(
-        client: AsyncClient,
-        bearer_token: str,
+    client: AsyncClient,
+    bearer_token: str,
 ):
     payload = {
         "name": "Test Category",
@@ -58,7 +51,7 @@ async def test_e2_create_category_with_member(
     response = await client.post(
         "/api/v1/categories/",
         json=payload,
-        headers={"Authorization": f"Bearer {bearer_token}"}
+        headers={"Authorization": f"Bearer {bearer_token}"},
     )
 
     assert response.status_code == 401

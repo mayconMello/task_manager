@@ -9,9 +9,7 @@ class CreateUserUseCase:
         self.repository = repository
 
     async def execute(self, body: UserCreate) -> User:
-        user_exists = await self.repository.get_by_email(
-            body.email
-        )
+        user_exists = await self.repository.get_by_email(body.email)
 
         if user_exists:
             raise UserAlreadyExists()

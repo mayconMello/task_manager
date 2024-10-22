@@ -24,9 +24,7 @@ class SQLAlchemyCategoryRepository(CategoryRepository):
         return Category.model_validate(db_category)
 
     async def list(self) -> List[Category]:
-        result = await self.session.execute(
-            select(CategoryModel)
-        )
+        result = await self.session.execute(select(CategoryModel))
 
         categories = result.scalars().all()
 

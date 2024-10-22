@@ -10,10 +10,7 @@ class InMemoryUserRepository(UserRepository):
         self.items: List[User] = []
 
     async def create(self, user: UserCreate) -> User:
-        db_user = User(
-            id=uuid4(),
-            **user.model_dump()
-        )
+        db_user = User(id=uuid4(), **user.model_dump())
         self.items.append(db_user)
 
         return db_user

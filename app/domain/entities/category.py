@@ -7,6 +7,4 @@ class Category(BaseModel):
     id: Optional[UUID4] = None
     name: str
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

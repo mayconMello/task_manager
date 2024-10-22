@@ -8,7 +8,6 @@ from app.domain.entities.task import Task, TaskUpdate, TaskCreate
 
 
 class TaskRepository(ABC):
-
     @abstractmethod
     async def create(self, task: TaskCreate) -> Task:
         raise NotImplementedError

@@ -7,9 +7,9 @@ from app.infra.repositories.user_repository import UserRepository
 
 class DeleteTaskUseCase:
     def __init__(
-            self,
-            repository: TaskRepository,
-            repository_user: UserRepository,
+        self,
+        repository: TaskRepository,
+        repository_user: UserRepository,
     ):
         self.repository = repository
         self.repository_user = repository_user
@@ -20,10 +20,7 @@ class DeleteTaskUseCase:
         if not user:
             raise ResourceNotFoundError()
 
-        task = await self.repository.get(
-            user.id,
-            task_id
-        )
+        task = await self.repository.get(user.id, task_id)
 
         if not task:
             raise ResourceNotFoundError()
