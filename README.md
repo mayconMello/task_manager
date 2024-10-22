@@ -1,48 +1,170 @@
-## RFs (Requisitos Funcionais)
+# Task Manager Application Backend
 
-- [x] Deve ser possível cadastrar um usuário.
-- [x] Deve ser possível autenticar um usuário.
-- [x] Deve ser possível criar uma task com título, descrição (opcional), data de vencimento (opcional), categoria (opcional) e prioridade (opcional).
-- [x] Deve ser possível listar todas as tasks de um usuário autenticado.
-- [x] Deve ser possível filtrar tasks por título, descrição, prioridade ou categoria.
-- [x] Deve ser possível visualizar os detalhes de uma task específica pelo seu ID.
-- [x] Deve ser possível atualizar uma task existente, incluindo o título, descrição, data de vencimento, categoria e prioridade.
-- [x] Deve ser possível excluir uma task pelo ID.
-- [x] Deve ser possível marcar uma task como concluída ou pendente.
-- [x] Deve ser possível adicionar subtasks a uma task.
-- [x] Deve ser possível listar, atualizar e remover subtasks associadas a uma task.
-- [x] Deve ser possível anexar arquivos a uma task.
-- [x] Deve ser possível listar e remover arquivos anexados a uma task.
-- [x] Deve ser possível adicionar, listar e remover comentários em uma task.
-- [x] Deve ser possível listar todas as categorias de tasks e criar novas categorias.
-- [x] Deve ser possível listar todas as tasks que estão próximas da data de vencimento (menos de 24 horas).
+Este repositório contém uma aplicação **FastAPI** para gerenciamento de tarefas, integrada com **PostgreSQL** e utilizando **Alembic** para migrações de banco de dados. A aplicação também faz uso do **Poetry** para gerenciamento de dependências.
 
+## Requisitos
 
-## RNs (Regras de Negócio)
+Antes de iniciar, certifique-se de ter as seguintes ferramentas instaladas em seu sistema:
 
-- [x] A data de vencimento de uma task deve ser igual ou maior que a data atual. 
-- [x] Não deve ser permitido cadastrar ou atualizar uma task com data de vencimento no passado.
-- [x] O título da task é obrigatório e deve ter um limite de 100 caracteres.
-- [x] Apenas o usuário que criou a task pode visualizá-la, editá-la ou excluí-la.
-- [x] Somente um usuário autenticado pode criar, atualizar ou deletar suas tasks.
-- [x] Não deve ser permitido cadastrar um usuário com um e-mail já existente.
-- [x] Apenas administradores podem criar e gerenciar categorias de tasks.
-- [x] Uma task deve ter uma das seguintes prioridades: baixa, média ou alta.
-- [x] Ao marcar uma task como concluída, todas as subtasks associadas também devem ser marcadas como concluídas.
-- [x] O tamanho máximo dos arquivos anexados a uma task deve ser de 5MB.
+- **Docker**: Para criar containers e orquestrar a aplicação e o banco de dados.
+- **Docker Compose**: Para facilitar o gerenciamento dos serviços.
+- **Poetry**: Para gerenciar as dependências do projeto.
+
+## Configurações Iniciais
+
+### 1. Variáveis de Ambiente
+
+A aplicação usa variáveis de ambiente para configurar a conexão com o banco de dados e outros parâmetros de execução. Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+
+```env
+# .env
+
+# Configurações do Banco de Dados
+DATABASE_URL=postgresql+asyncpg://<username>:<password>@db:5432/taskmanager
+DATABASE_URL_TEST=postgresql+asyncpg://<username>:<password>@db:5433/taskmanager_test
+
+# Configurações do JWT
+SECRET_KEY=your-secret-key
+
+# Outros parâmetros
+ENVIRONMENT=dev
+```
+
+A variável `ENVIRONMENT` deve ser configurada como `dev`, `test` ou `prd`, dependendo do ambiente de execução.
+Ao executar os testes com `pytest` automáticamente será atualizado para `test`.
+
+### 2. Instalar Dependências Localmente
+
+Se você pretende rodar a aplicação localmente, use o **Poetry** para instalar as dependências.
+
+```bash
+poetry install
+```
+
+### 3. Executando com Docker e Docker Compose
+
+A maneira mais simples de iniciar a aplicação é usando **Docker** e **Docker Compose**.
+
+#### Passos:
+
+1. **Build da Aplicação**:
+
+   Execute o seguinte comando para construir a imagem Docker da aplicação:
+
+   ```bash
+   docker-compose build
+   ```
+
+2. **Iniciar os Containers**:
+
+   Inicie a aplicação e o banco de dados:
+
+   ```bash
+   docker-compose up
+   ```
+
+3. **Aplicar Migrações**:
+
+   O script de inicialização do container irá automaticamente aguardar o PostgreSQL estar pronto e, em seguida, aplicar as migrações:
+
+   ```bash
+   # O script de inicialização já cuida disso, mas você pode aplicar manualmente se necessário:
+   docker-compose exec web alembic upgrade head
+   ```
+
+4. **Acessar a Aplicação**:
+
+   A aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
+
+   Você também pode acessar a documentação interativa **Swagger UI** em [http://localhost:8000/docs](http://localhost:8000/docs).
+
+### 4. Rodando os Testes
+
+Se você configurou os testes com **pytest**, você pode executá-los da seguinte maneira:
+
+1. **Dentro do Container Docker**:
+
+   Para rodar os testes no ambiente Docker, use o seguinte comando:
+
+   ```bash
+   docker-compose exec web poetry run pytest
+   ```
+
+2. **Localmente** (se as dependências estiverem instaladas via Poetry):
+
+   ```bash
+   poetry run pytest
+   ```
+
+### 5. Configurações Adicionais para Produção
+
+Para rodar a aplicação em ambiente de produção, alguns ajustes são recomendados:
+
+1. **Desabilitar o modo `--reload`** no arquivo `docker-compose.yml` ou no script de inicialização.
+   
+2. **Utilizar um Servidor de Produção**:
+   - Use um servidor como **Gunicorn** ou outro server de WSGI/ASGI para servir a aplicação em produção.
+
+### Estrutura do Projeto
+
+A estrutura do projeto segue a arquitetura **Clean Architecture** com as seguintes pastas principais:
+
+```bash
+├── .github           # Workflows CI/CD
+├── docker            # Configurações dos containers
+├── app
+│   ├── core          # Configurações e autenticação
+│   ├── domain        # Entidades e casos de uso
+│   ├── infra         # Repositórios e integração com DB
+│   ├── http          # Rotas e controllers (FastAPI)
+│   ├── tests         # Testes unitários e E2E    
+│   └── main.py       # Ponto de entrada da aplicação
+├── alembic           # Migrações de banco de dados
+├── .env              # Variáveis de ambiente
+├── pytest.ini        # Configurações do pytest
+├── docker-compose.yml # Orquestração do Docker
+├── Dockerfile        # Arquivo para build da imagem Docker
+└── pyproject.toml    # Arquivo de configuração do Poetry
+```
+
+## Comandos Úteis
+
+### Iniciar e Parar os Containers
+
+- **Iniciar os containers**:
+
+  ```bash
+  docker-compose up -d
+  ```
+
+- **Parar os containers**:
+
+  ```bash
+  docker-compose down
+  ```
+
+### Executar Migrações com Alembic
+
+- **Criar uma nova migração**:
+
+  ```bash
+  docker-compose exec web alembic revision --autogenerate -m "Descrição da migração"
+  ```
+
+- **Aplicar migrações**:
+
+  ```bash
+  docker-compose exec web alembic upgrade head
+  ```
+
+### Limpeza do Banco de Dados (Destruir Dados)
+
+Para destruir todos os dados e parar os containers:
+
+```bash
+docker-compose down -v
+```
 
 ---
 
-## RNFs (Requisitos Não-Funcionais)
-
-- [x] A API deve seguir o padrão REST, com endpoints intuitivos e organizados.
-- [x] A aplicação deve responder em um tempo aceitável para operações básicas de criação, leitura, atualização e exclusão.
-- [x] Deve ser validado que os dados de entrada estejam no formato correto, retornando mensagens de erro apropriadas em caso de valores inválidos.
-- [x] A aplicação deve ser modular e seguir boas práticas de arquitetura, como Clean Architecture e os princípios SOLID.
-- [x] A aplicação deve estar documentada com Swagger para que os endpoints e suas funcionalidades sejam facilmente compreendidos.
-- [x] Deve ser possível realizar testes unitários e de integração nos principais componentes da aplicação.
-- [x] A aplicação deve armazenar as tasks e usuários em um banco de dados relacional, como PostgreSQL ou SQLite.
-- [x] A senha do usuário deve ser armazenada de forma segura, utilizando hashing.
-- [x] O usuário deve ser identificado por um JWT (JSON Web Token);
-- [x] A aplicação deve ser escalável para suportar um número crescente de usuários e tasks.
-- [x] Os arquivos anexados devem ser armazenados de maneira segura, preferencialmente usando um serviço como Amazon S3 ou sistema de arquivos local com controle de acesso.
+Essa documentação fornece um guia básico para configurar, rodar e testar sua aplicação com **FastAPI**, **Poetry**, **PostgreSQL** e **Docker**.
