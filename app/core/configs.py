@@ -14,14 +14,14 @@ class Settings(BaseSettings):
     allowed_hosts: List[str] = ["localhost", "testserver"]
     allowed_origins: List[str] = ["http://localhost"]
 
+    secret_key: str
+
     storage_path: str = "media"
     storage_url: str = "media"
     max_file_size_bytes: int = 5 * 1024 * 1024
 
     database_url: str
     database_url_test: str = None
-
-    secret_key: str
 
     jwt_expires_token_in_minutes: int = 10
     jwt_expires_refresh_token_in_days: int = 7
