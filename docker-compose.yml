@@ -4,10 +4,18 @@ services:
     image: bitnami/postgresql
     ports:
       - "5432:5432"
+    volumes:
+      - ./docker/db/postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=taskmanager
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   db-test:
     container_name: 'task-manager-db-test'
@@ -18,3 +26,17 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=taskmanager_test
+
+  web:
+    container_name: 'task-manager-web'
+    image: 'task-manager:latest'
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+    command: "sh docker/web/start.sh"
+    volumes:
+      - .:/app

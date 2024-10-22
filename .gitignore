@@ -3,4 +3,6 @@ venv
 .env
 .idea/
 
+docker/db/postgres_data
+
 __pycache__
