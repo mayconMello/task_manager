@@ -52,7 +52,9 @@ async def tasks(session: AsyncSession, category: Category, user: User):
 
 @pytest.mark.asyncio
 async def test_e2e_list_tasks(client: AsyncClient, bearer_token: str, tasks):
-    response = await client.get("/api/v1/tasks/", headers={"Authorization": f"Bearer {bearer_token}"})
+    response = await client.get(
+        "/api/v1/tasks/", headers={"Authorization": f"Bearer {bearer_token}"}
+    )
 
     assert response.status_code == 200
     data = response.json()
@@ -85,7 +87,9 @@ async def test_e2e_list_tasks_by_title(client: AsyncClient, bearer_token: str, t
 
 
 @pytest.mark.asyncio
-async def test_e2e_list_tasks_by_description(client: AsyncClient, bearer_token: str, tasks):
+async def test_e2e_list_tasks_by_description(
+    client: AsyncClient, bearer_token: str, tasks
+):
     response = await client.get(
         "/api/v1/tasks/",
         params={"description": "Vacuum"},
@@ -100,7 +104,9 @@ async def test_e2e_list_tasks_by_description(client: AsyncClient, bearer_token: 
 
 
 @pytest.mark.asyncio
-async def test_e2e_list_tasks_by_priority(client: AsyncClient, bearer_token: str, tasks):
+async def test_e2e_list_tasks_by_priority(
+    client: AsyncClient, bearer_token: str, tasks
+):
     response = await client.get(
         "/api/v1/tasks/",
         params={"priority": "high"},

@@ -1,4 +1,5 @@
 import traceback
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,27 +17,36 @@ from app.domain.errors import (
     OperationNotAllowedError,
 )
 from app.http.api import routers as api_routers
+from app.infra.dramatiq.scheduler import scheduler
 
-app = FastAPI()
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.start()
+    yield
+    scheduler.stop()
+
+
+app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOTS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_origins,
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-if settings.environment == "prd":
+if settings.ENVIRONMENT == "production":
     app.add_middleware(HTTPSRedirectMiddleware)
 
 app.include_router(api_routers.router)
 
 app.mount(
-    f"/{settings.storage_url}/",
-    StaticFiles(directory=settings.storage_path),
-    name=settings.storage_url,
+    f"/{settings.MEDIA_URL}/",
+    StaticFiles(directory=settings.MEDIA_PATH),
+    name=settings.MEDIA_URL,
 )
 
 

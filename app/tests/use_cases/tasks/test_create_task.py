@@ -4,8 +4,12 @@ import pytest
 import pytest_asyncio
 from pydantic import ValidationError
 
+from app.domain.entities.category import Category
 from app.domain.entities.user import User
 from app.domain.use_cases.tasks.create import CreateTaskUseCase
+from app.infra.repositories.in_memory.in_memory_category_repository import (
+    InMemoryCategoryRepository,
+)
 from app.infra.repositories.in_memory.in_memory_task_repository import (
     InMemoryTaskRepository,
 )
@@ -26,20 +30,51 @@ def repository_user():
     return InMemoryUserRepository()
 
 
+@pytest.fixture
+def repository_category():
+    return InMemoryCategoryRepository()
+
+
 @pytest_asyncio.fixture
 async def user(repository_user: InMemoryUserRepository) -> User:
     user = await repository_user.create(make_user())
     return user
 
 
+@pytest_asyncio.fixture
+async def category(repository_category: InMemoryCategoryRepository) -> Category:
+    category = await repository_category.create(
+        Category(
+            name="Test Category",
+        )
+    )
+    return category
+
+
 @pytest.fixture
-def use_case(repository: InMemoryTaskRepository, repository_user: InMemoryUserRepository) -> CreateTaskUseCase:
-    return CreateTaskUseCase(repository, repository_user)
+def use_case(
+    repository: InMemoryTaskRepository,
+    repository_user: InMemoryUserRepository,
+    repository_category: InMemoryCategoryRepository,
+) -> CreateTaskUseCase:
+    return CreateTaskUseCase(repository, repository_user, repository_category)
 
 
 @pytest.mark.asyncio
-async def test_create_task(repository: InMemoryTaskRepository, use_case: CreateTaskUseCase, user: User):
-    task = await use_case.execute(user.id, make_task())
+async def test_create_task(
+    repository: InMemoryTaskRepository,
+    use_case: CreateTaskUseCase,
+    user: User,
+    category: Category,
+):
+    task = await use_case.execute(
+        user.id,
+        make_task(
+            OverrideTask(
+                category_id=category.id,
+            )
+        ),
+    )
 
     assert len(repository.items) == 1
     assert repository.items[0].title == task.title
@@ -47,22 +82,27 @@ async def test_create_task(repository: InMemoryTaskRepository, use_case: CreateT
 
 @pytest.mark.asyncio
 async def test_create_task_with_title_more_than_100_caracters(
-    repository: InMemoryTaskRepository, use_case: CreateTaskUseCase, user: User
+    repository: InMemoryTaskRepository,
+    use_case: CreateTaskUseCase,
+    user: User,
+    category: Category,
 ):
     with pytest.raises(ValidationError):
         await use_case.execute(
             user.id,
-            make_task(
-                OverrideTask(
-                    title="A" * 101,
-                )
-            ),
+            make_task(OverrideTask(title="A" * 101, category_id=category.id)),
         )
 
 
 @pytest.mark.asyncio
 async def test_create_task_with_invalid_due_date(
-    repository: InMemoryTaskRepository, use_case: CreateTaskUseCase, user: User
+    repository: InMemoryTaskRepository,
+    use_case: CreateTaskUseCase,
+    user: User,
+    category: Category,
 ):
     with pytest.raises(ValidationError):
-        await use_case.execute(user.id, make_task(OverrideTask(due_date=datetime.now())))
+        await use_case.execute(
+            user.id,
+            make_task(OverrideTask(due_date=datetime.now(), category_id=category.id)),
+        )

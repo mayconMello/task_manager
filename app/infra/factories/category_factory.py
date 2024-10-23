@@ -19,8 +19,12 @@ class CategoryFactory:
         repository_user = SQLAlchemyUserRepository(session)
         return repository, repository_user
 
-    def create_category_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateCategoryUseCase:
+    def create_category_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateCategoryUseCase:
         return CreateCategoryUseCase(*self.repositories(session))
 
-    def list_categories_use_case(self, session: AsyncSession = Depends(get_session)) -> ListCategoriesUseCase:
+    def list_categories_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListCategoriesUseCase:
         return ListCategoriesUseCase(*self.repositories(session))

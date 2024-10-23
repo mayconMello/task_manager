@@ -51,7 +51,9 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_update_status_task(repository: InMemoryTaskRepository, use_case: UpdateStatusTaskUseCase, user: User):
+async def test_update_status_task(
+    repository: InMemoryTaskRepository, use_case: UpdateStatusTaskUseCase, user: User
+):
     task = await repository.create(
         make_task(
             OverrideTask(

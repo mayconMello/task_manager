@@ -17,7 +17,9 @@ category_factory = CategoryFactory()
 @router.post("/", response_model=Category, status_code=status.HTTP_201_CREATED)
 async def create(
     body: Category,
-    use_case: CreateCategoryUseCase = Depends(category_factory.create_category_use_case),
+    use_case: CreateCategoryUseCase = Depends(
+        category_factory.create_category_use_case
+    ),
     current_user: str = Depends(get_current_user),
 ):
     category = await use_case.execute(current_user, body)
@@ -27,7 +29,9 @@ async def create(
 
 @router.get("/", response_model=List[Category])
 async def list_categories(
-    use_case: ListCategoriesUseCase = Depends(category_factory.list_categories_use_case),
+    use_case: ListCategoriesUseCase = Depends(
+        category_factory.list_categories_use_case
+    ),
 ):
     categories = await use_case.execute()
 

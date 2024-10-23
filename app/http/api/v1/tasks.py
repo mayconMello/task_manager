@@ -41,7 +41,9 @@ async def list_tasks(
 
 @router.get("/due-soon", response_model=List[Task])
 async def list_due_soon(
-    use_case: ListTasksDueSoonUseCase = Depends(task_factory.list_tasks_due_soon_use_case),
+    use_case: ListTasksDueSoonUseCase = Depends(
+        task_factory.list_tasks_due_soon_use_case
+    ),
     current_user_id: str = Depends(get_current_user),
 ):
     tasks = await use_case.execute(current_user_id)
@@ -83,8 +85,12 @@ async def update(
 async def update_status(
     task_id: str,
     body: TaskUpdateStatus,
-    use_case: UpdateStatusTaskUseCase = Depends(task_factory.update_status_task_use_case),
+    use_case: UpdateStatusTaskUseCase = Depends(
+        task_factory.update_status_task_use_case
+    ),
     current_user_id: str = Depends(get_current_user),
 ):
-    task = await use_case.execute(task_id, current_user_id, is_completed=body.is_completed)
+    task = await use_case.execute(
+        task_id, current_user_id, is_completed=body.is_completed
+    )
     return task

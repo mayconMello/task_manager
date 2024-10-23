@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 echo "Apply migrations on db"
 /usr/local/bin/poetry run alembic upgrade head

@@ -14,7 +14,9 @@ router = APIRouter(tags=["Comments"])
 comment_factory = CommentFactory()
 
 
-@router.post("/{task_id}/comments", response_model=Comment, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{task_id}/comments", response_model=Comment, status_code=status.HTTP_201_CREATED
+)
 async def create(
     task_id: str,
     body: Comment,
@@ -40,7 +42,9 @@ async def list_comments(
     return comments
 
 
-@router.delete("/{task_id}/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{task_id}/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT
+)
 async def delete(
     task_id: str,
     comment_id: str,

@@ -34,7 +34,9 @@ class InMemorySubtaskRepository(SubtaskRepository):
             if item.task_id == task_id and item.id == subtask_id:
                 self.items.remove(item)
 
-    async def update(self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate) -> Subtask:
+    async def update(
+        self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate
+    ) -> Subtask:
         for index, item in enumerate(self.items):
             if item.task_id == task_id and item.id == subtask_id:
                 item.title = subtask.title

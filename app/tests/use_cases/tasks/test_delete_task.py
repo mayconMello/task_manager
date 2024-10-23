@@ -40,7 +40,9 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_delete_task(repository: InMemoryTaskRepository, use_case: DeleteTaskUseCase, user: User):
+async def test_delete_task(
+    repository: InMemoryTaskRepository, use_case: DeleteTaskUseCase, user: User
+):
     task_1 = await repository.create(
         make_task(
             OverrideTask(

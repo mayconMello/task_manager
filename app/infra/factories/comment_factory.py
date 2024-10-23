@@ -21,11 +21,17 @@ class CommentFactory:
 
         return repository, repository_task
 
-    def create_comment_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateCommentUseCase:
+    def create_comment_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateCommentUseCase:
         return CreateCommentUseCase(*self.repositories(session))
 
-    def delete_comment_use_case(self, session: AsyncSession = Depends(get_session)) -> DeleteCommentUseCase:
+    def delete_comment_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> DeleteCommentUseCase:
         return DeleteCommentUseCase(*self.repositories(session))
 
-    def list_comments_use_case(self, session: AsyncSession = Depends(get_session)) -> ListCommentUseCase:
+    def list_comments_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListCommentUseCase:
         return ListCommentUseCase(*self.repositories(session))

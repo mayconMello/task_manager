@@ -41,7 +41,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_get_subtask(repository: InMemorySubtaskRepository, use_case: GetSubtaskUseCase, task):
+async def test_get_subtask(
+    repository: InMemorySubtaskRepository, use_case: GetSubtaskUseCase, task
+):
     subtask = await repository.create(
         make_subtask(
             OverrideSubtask(
@@ -64,7 +66,9 @@ async def test_get_subtask_with_invalid_task_id(
 
 
 @pytest.mark.asyncio
-async def test_get_subtask_with_invalid_id(repository: InMemorySubtaskRepository, use_case: GetSubtaskUseCase, task):
+async def test_get_subtask_with_invalid_id(
+    repository: InMemorySubtaskRepository, use_case: GetSubtaskUseCase, task
+):
     await repository.create(make_subtask())
     with pytest.raises(ResourceNotFoundError):
         await use_case.execute(task.user_id, task.id, "invalid-subtask-id")

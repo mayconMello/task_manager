@@ -57,7 +57,9 @@ async def test_e2e_delete_attachment_without_authentication(
 
 
 @pytest.mark.asyncio
-async def test_e2e_delete_attachment_with_invalid_id(client: AsyncClient, bearer_token: str, task: Task):
+async def test_e2e_delete_attachment_with_invalid_id(
+    client: AsyncClient, bearer_token: str, task: Task
+):
     response = await client.delete(
         f"/api/v1/tasks/{task.id}/attachments/{uuid4().__str__()}",
         headers={"Authorization": f"Bearer {bearer_token}"},

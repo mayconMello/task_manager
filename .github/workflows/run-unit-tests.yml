@@ -33,3 +33,9 @@ jobs:
           SECRET_KEY: taskmanager-app
           DATABASE_URL: "postgresql://docker:docker@localhost:5432/taskmanager_test"
           DATABASE_URL_TEST: "postgresql://docker:docker@localhost:5432/taskmanager_test"
+          EMAIL_HOST: 'test-email-host'
+          EMAIL_PORT: '465'
+          EMAIL_HOST_USER: 'test-email-user'
+          EMAIL_HOST_PASSWORD: 'test-email-password'
+          BROKER_HOST: 'test-broker-host'
+          BROKER_PORT: 6379

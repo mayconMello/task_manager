@@ -12,7 +12,9 @@ class GetSubtaskUseCase:
     async def execute(self, user_id: str, task_id: str, subtask_id: str) -> Subtask:
         task = await self.repository_task.get(user_id, task_id)
         if not task:
-            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
+            raise ResourceNotFoundError(
+                "Task not found or you do not have permission to access this task."
+            )
 
         subtask = await self.repository.get(task_id, subtask_id)
         if not subtask:

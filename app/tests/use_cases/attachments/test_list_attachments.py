@@ -41,7 +41,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_list_attachments(repository: InMemoryAttachmentRepository, use_case: ListAttachmentsUseCase, task):
+async def test_list_attachments(
+    repository: InMemoryAttachmentRepository, use_case: ListAttachmentsUseCase, task
+):
     attachment = await repository.create(
         make_attachment(
             OverrideAttachment(

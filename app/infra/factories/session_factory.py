@@ -15,5 +15,7 @@ class SessionFactory:
     ) -> SQLAlchemyUserRepository:
         return SQLAlchemyUserRepository(session)
 
-    def authenticate_use_case(self, session: AsyncSession = Depends(get_session)) -> AuthenticateUseCase:
+    def authenticate_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> AuthenticateUseCase:
         return AuthenticateUseCase(self.repository(session))

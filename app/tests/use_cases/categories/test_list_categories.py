@@ -18,7 +18,9 @@ def use_case(repository: InMemoryCategoryRepository):
 
 
 @pytest.mark.asyncio
-async def test_list_categories(use_case: ListCategoriesUseCase, repository: InMemoryCategoryRepository):
+async def test_list_categories(
+    use_case: ListCategoriesUseCase, repository: InMemoryCategoryRepository
+):
     category_1 = Category(name="Category 1")
     category_2 = Category(name="Category 2")
 

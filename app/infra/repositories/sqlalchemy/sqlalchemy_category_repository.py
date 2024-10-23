@@ -31,3 +31,13 @@ class SQLAlchemyCategoryRepository(CategoryRepository):
         categories = list(map(Category.model_validate, categories))
 
         return categories
+
+    async def get(self, category_id: int) -> Category | None:
+        query = select(CategoryModel).where(CategoryModel.id == category_id)
+        result = await self.session.execute(query)
+        category = result.scalar_one_or_none()
+
+        if category:
+            return Category.model_validate(category)
+
+        return category

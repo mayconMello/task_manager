@@ -4,6 +4,9 @@ from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, UUID4
 
+from app.domain.entities.user import User
+from app.domain.entities.category import Category
+
 
 class Task(BaseModel):
     id: Optional[UUID4] = None
@@ -11,9 +14,11 @@ class Task(BaseModel):
     description: Optional[str] = None
     due_date: Optional[datetime] = None
     category_id: Optional[UUID4] = None
+    category: Optional[Category] = None
     priority: Optional[Literal["low", "medium", "high"]] = "medium"
     is_completed: bool = False
     user_id: Optional[UUID4] = None
+    user: Optional[User] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 

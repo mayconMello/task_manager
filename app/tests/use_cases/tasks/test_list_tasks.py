@@ -40,7 +40,9 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_create_task(repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User):
+async def test_create_task(
+    repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User
+):
     task_1 = await repository.create(
         make_task(
             OverrideTask(
@@ -68,8 +70,12 @@ async def test_create_task_with_invalid_user(
 
 
 @pytest.mark.asyncio
-async def test_filter_tasks_by_title(repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User):
-    await repository.create(make_task(OverrideTask(title="Filter Task", user_id=user.id)))
+async def test_filter_tasks_by_title(
+    repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User
+):
+    await repository.create(
+        make_task(OverrideTask(title="Filter Task", user_id=user.id))
+    )
     await repository.create(
         make_task(
             OverrideTask(
@@ -91,7 +97,9 @@ async def test_filter_tasks_by_title(repository: InMemoryTaskRepository, use_cas
 
 
 @pytest.mark.asyncio
-async def test_filter_tasks_by_description(repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User):
+async def test_filter_tasks_by_description(
+    repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User
+):
     await repository.create(
         make_task(
             OverrideTask(
@@ -99,7 +107,11 @@ async def test_filter_tasks_by_description(repository: InMemoryTaskRepository, u
             )
         )
     )
-    await repository.create(make_task(OverrideTask(description="Filter Task by description", user_id=user.id)))
+    await repository.create(
+        make_task(
+            OverrideTask(description="Filter Task by description", user_id=user.id)
+        )
+    )
     await repository.create(
         make_task(
             OverrideTask(
@@ -115,7 +127,9 @@ async def test_filter_tasks_by_description(repository: InMemoryTaskRepository, u
 
 
 @pytest.mark.asyncio
-async def test_filter_tasks_by_priority(repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User):
+async def test_filter_tasks_by_priority(
+    repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User
+):
     await repository.create(
         make_task(
             OverrideTask(
@@ -132,7 +146,9 @@ async def test_filter_tasks_by_priority(repository: InMemoryTaskRepository, use_
             )
         )
     )
-    task = await repository.create(make_task(OverrideTask(priority="high", user_id=user.id)))
+    task = await repository.create(
+        make_task(OverrideTask(priority="high", user_id=user.id))
+    )
 
     tasks = await use_case.execute(user.id, TaskListFilter(priority="high"))
 
@@ -141,7 +157,9 @@ async def test_filter_tasks_by_priority(repository: InMemoryTaskRepository, use_
 
 
 @pytest.mark.asyncio
-async def test_filter_tasks_by_category_id(repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User):
+async def test_filter_tasks_by_category_id(
+    repository: InMemoryTaskRepository, use_case: ListTasksUseCase, user: User
+):
     await repository.create(
         make_task(
             OverrideTask(
@@ -158,7 +176,9 @@ async def test_filter_tasks_by_category_id(repository: InMemoryTaskRepository, u
     )
     task = await repository.create(make_task(OverrideTask(user_id=user.id)))
 
-    tasks = await use_case.execute(user.id, TaskListFilter(category_id=task.category_id))
+    tasks = await use_case.execute(
+        user.id, TaskListFilter(category_id=task.category_id)
+    )
 
     assert len(tasks) == 1
     assert tasks[0].title == task.title

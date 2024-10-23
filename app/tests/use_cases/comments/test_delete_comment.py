@@ -41,7 +41,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_delete_comment(repository: InMemoryCommentRepository, use_case: DeleteCommentUseCase, task):
+async def test_delete_comment(
+    repository: InMemoryCommentRepository, use_case: DeleteCommentUseCase, task
+):
     comment = await repository.create(
         make_comment(
             OverrideComment(

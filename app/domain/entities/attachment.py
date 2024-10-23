@@ -27,7 +27,7 @@ class Attachment(BaseModel):
     @property
     def url(self) -> str:
         if self.request is None:
-            return f"/{settings.storage_url}/{self.filename}"
+            return f"/{settings.MEDIA_URL}/{self.filename}"
 
-        url = self.request.url_for(settings.storage_url, path=self.filename)
+        url = self.request.url_for(settings.MEDIA_URL, path=self.filename)
         return str(url)

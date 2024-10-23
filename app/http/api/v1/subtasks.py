@@ -17,7 +17,9 @@ router = APIRouter(tags=["Subtasks"])
 subtask_factory = SubtaskFactory()
 
 
-@router.post("/{task_id}/subtasks", response_model=Subtask, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{task_id}/subtasks", response_model=Subtask, status_code=status.HTTP_201_CREATED
+)
 async def create(
     task_id: str,
     body: Subtask,
@@ -51,7 +53,9 @@ async def list_subtasks(
     return subtasks
 
 
-@router.delete("/{task_id}/subtasks/{subtask_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{task_id}/subtasks/{subtask_id}", status_code=status.HTTP_204_NO_CONTENT
+)
 async def delete(
     task_id: str,
     subtask_id: str,

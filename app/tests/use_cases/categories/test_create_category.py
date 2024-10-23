@@ -40,12 +40,16 @@ async def user(repository_user: InMemoryUserRepository) -> User:
 
 
 @pytest.fixture
-def use_case(repository: InMemoryCategoryRepository, repository_user: InMemoryUserRepository):
+def use_case(
+    repository: InMemoryCategoryRepository, repository_user: InMemoryUserRepository
+):
     return CreateCategoryUseCase(repository, repository_user)
 
 
 @pytest.mark.asyncio
-async def test_create_category(use_case: CreateCategoryUseCase, repository: InMemoryCategoryRepository, user: User):
+async def test_create_category(
+    use_case: CreateCategoryUseCase, repository: InMemoryCategoryRepository, user: User
+):
     category = await use_case.execute(user.id, Category(name="Some Category"))
 
     assert len(repository.items) == 1

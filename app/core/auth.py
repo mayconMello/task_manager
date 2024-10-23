@@ -22,24 +22,30 @@ def get_password_hash(password: str) -> str:
 
 
 def create_jwt_token(sub: UUID4):
-    expire = get_utc_now() + timedelta(minutes=settings.jwt_expires_token_in_minutes)
+    expire = get_utc_now() + timedelta(minutes=settings.JWT_EXPIRES_TOKEN_IN_MINUTES)
     to_encode = {"exp": expire, "sub": str(sub)}
-    encoded_jwt = encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+    encoded_jwt = encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM
+    )
     return encoded_jwt
 
 
 def create_jwt_refresh_token(sub: UUID4):
-    expire = get_utc_now() + timedelta(minutes=settings.jwt_expires_refresh_token_in_days)
+    expire = get_utc_now() + timedelta(
+        minutes=settings.JWT_EXPIRES_REFRESH_TOKEN_IN_DAYS
+    )
     to_encode = {"exp": expire, "sub": str(sub)}
-    encoded_jwt = encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+    encoded_jwt = encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM
+    )
     return encoded_jwt
 
 
 def decode_token(token: str) -> str:
     payload = decode(
         token,
-        settings.secret_key,
-        algorithms=[settings.jwt_algorithm],
+        settings.SECRET_KEY,
+        algorithms=[settings.JWT_ALGORITHM],
     )
 
     sub = payload["sub"]

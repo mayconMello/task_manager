@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List
+from typing import Optional
 
 from pydantic import UUID4
 
@@ -17,7 +18,9 @@ class TaskRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def list_due_soon(self, user_id: UUID4, due_time_limit: datetime) -> List[Task]:
+    async def list_due_soon(
+        self, due_time_limit: datetime, user_id: Optional[UUID4] = None
+    ) -> List[Task]:
         raise NotImplementedError
 
     @abstractmethod

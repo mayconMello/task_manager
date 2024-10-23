@@ -26,5 +26,5 @@ class ListTasksDueSoonUseCase:
 
         current_time = datetime.now()
         due_time_limit = current_time + timedelta(hours=24)
-        tasks = await self.repository.list_due_soon(user.id, due_time_limit)
+        tasks = await self.repository.list_due_soon(due_time_limit, user.id)
         return tasks

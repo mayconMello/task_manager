@@ -23,16 +23,24 @@ class SubtaskFactory:
 
         return repository, repository_task
 
-    def create_subtask_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateSubtaskUseCase:
+    def create_subtask_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateSubtaskUseCase:
         return CreateSubtaskUseCase(*self.repositories(session))
 
-    def list_subtasks_use_case(self, session: AsyncSession = Depends(get_session)) -> ListSubtaskUseCase:
+    def list_subtasks_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListSubtaskUseCase:
         return ListSubtaskUseCase(*self.repositories(session))
 
-    def get_subtask_use_case(self, session: AsyncSession = Depends(get_session)) -> GetSubtaskUseCase:
+    def get_subtask_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> GetSubtaskUseCase:
         return GetSubtaskUseCase(*self.repositories(session))
 
-    def delete_subtask_use_case(self, session: AsyncSession = Depends(get_session)) -> DeleteSubtaskUseCase:
+    def delete_subtask_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> DeleteSubtaskUseCase:
         return DeleteSubtaskUseCase(*self.repositories(session))
 
     def update_subtask_use_case(self, session: AsyncSession = Depends(get_session)):
