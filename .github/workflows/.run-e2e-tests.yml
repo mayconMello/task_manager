@@ -48,4 +48,4 @@ jobs:
           EMAIL_HOST_USER: 'test-email-user'
           EMAIL_HOST_PASSWORD: 'test-email-password'
           BROKER_HOST: 'test-broker-host'
-          BROKER_PORT: 'test-broker-port'
+          BROKER_PORT: 6379
