@@ -43,3 +43,9 @@ jobs:
           SECRET_KEY: testing
           DATABASE_URL: "postgresql+asyncpg://docker:docker@localhost:5432/taskmanager"
           DATABASE_URL_TEST: "postgresql+asyncpg://docker:docker@localhost:5433/taskmanager_test"
+          EMAIL_HOST: 'test-email-host'
+          EMAIL_PORT: '465'
+          EMAIL_HOST_USER: 'test-email-user'
+          EMAIL_HOST_PASSWORD: 'test-email-password'
+          BROKER_HOST: 'test-broker-host'
+          BROKER_PORT: 'test-broker-port'
