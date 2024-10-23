@@ -42,7 +42,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_update_subtask(repository: InMemorySubtaskRepository, use_case: UpdateSubtaskUseCase, task):
+async def test_update_subtask(
+    repository: InMemorySubtaskRepository, use_case: UpdateSubtaskUseCase, task
+):
     subtask = await repository.create(
         make_subtask(
             OverrideSubtask(

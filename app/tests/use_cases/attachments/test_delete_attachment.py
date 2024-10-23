@@ -3,7 +3,6 @@ import os
 import pytest
 import pytest_asyncio
 
-from app.core.configs import settings, BASE_DIR
 from app.domain.errors import ResourceNotFoundError
 from app.domain.use_cases.attachments.delete import DeleteAttachmentUseCase
 from app.infra.repositories.in_memory.in_memory_attachment_repository import (
@@ -14,21 +13,6 @@ from app.infra.repositories.in_memory.in_memory_task_repository import (
 )
 from app.utils.tests.make_attachment import make_attachment, OverrideAttachment
 from app.utils.tests.make_task import make_task
-
-
-@pytest.fixture
-def test_storage_path():
-    original_storage_path = settings.storage_full_path
-    test_storage = BASE_DIR.joinpath("media/test_attachments")
-    os.makedirs(test_storage, exist_ok=True)
-    settings.storage_path = test_storage
-    yield test_storage
-
-    settings.storage_path = original_storage_path
-    if test_storage.exists():
-        for file in test_storage.iterdir():
-            file.unlink()
-        test_storage.rmdir()
 
 
 @pytest.fixture
@@ -66,7 +50,9 @@ async def test_delete_attachment(
     test_storage_path,
 ):
     filename = test_storage_path / "test.txt"
-    attachment = await repository.create(make_attachment(OverrideAttachment(task_id=task.id, filename="test.txt")))
+    attachment = await repository.create(
+        make_attachment(OverrideAttachment(task_id=task.id, filename="test.txt"))
+    )
     with open(filename, "w") as file:
         file.write("test")
 

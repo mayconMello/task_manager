@@ -11,7 +11,9 @@ class DeleteCommentUseCase:
     async def execute(self, user_id: str, task_id: str, comment_id: str):
         task = await self.repository_task.get(user_id, task_id)
         if not task:
-            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
+            raise ResourceNotFoundError(
+                "Task not found or you do not have permission to access this task."
+            )
 
         comment = await self.repository.get(task_id, comment_id)
         if not comment:

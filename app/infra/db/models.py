@@ -23,6 +23,7 @@ class UserModel(Base):
 
     tasks = relationship("TaskModel", back_populates="user")
     comments = relationship("CommentModel", back_populates="user")
+    notifications = relationship("NotificationModel", back_populates="user")
 
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
@@ -60,11 +61,20 @@ class TaskModel(Base):
     user_id = Column(UUID, ForeignKey("users.id"), nullable=False)
     category_id = Column(UUID, ForeignKey("categories.id"), nullable=True)
 
-    user = relationship("UserModel", back_populates="tasks")
-    category = relationship("CategoryModel", back_populates="tasks")
-    subtasks = relationship("SubtaskModel", back_populates="task", cascade="all, delete-orphan")
-    comments = relationship("CommentModel", back_populates="task", cascade="all, delete-orphan")
-    attachments = relationship("AttachmentModel", back_populates="task", cascade="all, delete-orphan")
+    user = relationship("UserModel", back_populates="tasks", lazy="raise")
+    category = relationship("CategoryModel", back_populates="tasks", lazy="raise")
+    subtasks = relationship(
+        "SubtaskModel", back_populates="task", cascade="all, delete-orphan"
+    )
+    comments = relationship(
+        "CommentModel", back_populates="task", cascade="all, delete-orphan"
+    )
+    attachments = relationship(
+        "AttachmentModel", back_populates="task", cascade="all, delete-orphan"
+    )
+    notifications = relationship(
+        "NotificationModel", back_populates="task", cascade="all, delete-orphan"
+    )
 
 
 class SubtaskModel(Base):
@@ -117,3 +127,22 @@ class AttachmentModel(Base):
     task_id = Column(UUID, ForeignKey("tasks.id"), nullable=False)
 
     task = relationship("TaskModel", back_populates="attachments")
+
+
+class NotificationModel(Base):
+    __tablename__ = 'notifications'
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    task_id = Column(UUID, ForeignKey("tasks.id"), nullable=True)
+    task = relationship(
+        "TaskModel",
+        back_populates="notifications",
+    )
+
+    user_id = Column(UUID, ForeignKey("users.id"), nullable=True)
+    user = relationship(
+        "UserModel",
+        back_populates="notifications",
+    )
+
+    sent_at = Column(DateTime, nullable=True)

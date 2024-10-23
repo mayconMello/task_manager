@@ -70,7 +70,9 @@ async def test_e2e_list_comments_without_authentication(
 
 
 @pytest.mark.asyncio
-async def test_e2e_list_comment_with_invalid_id(client: AsyncClient, bearer_token: str, task: Task, comments):
+async def test_e2e_list_comment_with_invalid_id(
+    client: AsyncClient, bearer_token: str, task: Task, comments
+):
     response = await client.get(
         f"/api/v1/tasks/{uuid4().__str__()}/comments",
         headers={"Authorization": f"Bearer {bearer_token}"},

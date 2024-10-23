@@ -23,11 +23,17 @@ class AttachmentFactory:
 
         return repository, repository_task
 
-    def create_attachment_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateAttachmentUseCase:
+    def create_attachment_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateAttachmentUseCase:
         return CreateAttachmentUseCase(*self.repositories(session))
 
-    def list_attachments_use_case(self, session: AsyncSession = Depends(get_session)) -> ListAttachmentsUseCase:
+    def list_attachments_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListAttachmentsUseCase:
         return ListAttachmentsUseCase(*self.repositories(session))
 
-    def delete_attachment_use_case(self, session: AsyncSession = Depends(get_session)) -> DeleteAttachmentUseCase:
+    def delete_attachment_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> DeleteAttachmentUseCase:
         return DeleteAttachmentUseCase(*self.repositories(session))

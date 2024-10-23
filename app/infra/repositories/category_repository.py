@@ -12,3 +12,7 @@ class CategoryRepository(ABC):
     @abstractmethod
     async def list(self) -> List[Category]:
         raise NotImplementedError
+
+    @abstractmethod
+    async def get(self, category_id: int) -> Category | None:
+        raise NotImplementedError

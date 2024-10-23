@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Notification</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .task-list { margin: 20px 0; padding: 0; list-style: none; }
+        .task-list li { margin-bottom: 10px; }
+        .task-title { font-weight: bold; }
+        .task-due { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Upcoming Task Deadlines</h1>
+    <p>Hello {{ user_name }},</p>
+    <p>You have the following tasks due soon:</p>
+
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li>
+            <span class="task-title">{{ task.title }}</span> -
+            <span class="task-due">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p>Please make sure to complete them on time.</p>
+    <p>Thank you!</p>
+</body>
+</html>

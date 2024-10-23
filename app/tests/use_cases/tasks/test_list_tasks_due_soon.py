@@ -42,7 +42,9 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_create_task(repository: InMemoryTaskRepository, use_case: ListTasksDueSoonUseCase, user: User):
+async def test_create_task(
+    repository: InMemoryTaskRepository, use_case: ListTasksDueSoonUseCase, user: User
+):
     task_due_soon = await repository.create(
         make_task(
             OverrideTask(

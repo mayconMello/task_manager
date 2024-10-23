@@ -14,5 +14,7 @@ from app.utils.tests.make_task import make_task, OverrideTask
 async def task(session: AsyncSession, category: Category, user: User) -> Task:
     repository = SQLAlchemyTaskRepository(session)
 
-    task = await repository.create(make_task(OverrideTask(user_id=user.id, category_id=category.id)))
+    task = await repository.create(
+        make_task(OverrideTask(user_id=user.id, category_id=category.id))
+    )
     return task

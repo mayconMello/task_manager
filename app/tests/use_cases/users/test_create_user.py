@@ -20,14 +20,18 @@ def use_case(repository: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_create_user(repository: InMemoryUserRepository, use_case: CreateUserUseCase):
+async def test_create_user(
+    repository: InMemoryUserRepository, use_case: CreateUserUseCase
+):
     user = await use_case.execute(make_user())
 
     assert repository.items[0].email == user.email
 
 
 @pytest.mark.asyncio
-async def test_create_user_with_same_email_twice(repository: InMemoryUserRepository, use_case: CreateUserUseCase):
+async def test_create_user_with_same_email_twice(
+    repository: InMemoryUserRepository, use_case: CreateUserUseCase
+):
     await repository.create(
         make_user(
             OverrideUser(
@@ -49,7 +53,9 @@ async def test_create_user_with_same_email_twice(repository: InMemoryUserReposit
 
 
 @pytest.mark.asyncio
-async def test_password_hash_on_create_user(repository: InMemoryUserRepository, use_case: CreateUserUseCase):
+async def test_password_hash_on_create_user(
+    repository: InMemoryUserRepository, use_case: CreateUserUseCase
+):
     user = await use_case.execute(make_user(OverrideUser(password="ABC123456")))
 
     is_password_correctly_hash = verify_password("ABC123456", user.password)

@@ -3,7 +3,7 @@ repos:
     rev: 23.1.0
     hooks:
       - id: black
-        args: ["--skip-string-normalization"]
+        args: ["--skip-string-normalization", "--line-length=88"]
         exclude: ^app/infra/db/migrations/
 
   - repo: https://github.com/pycqa/flake8

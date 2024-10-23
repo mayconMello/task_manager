@@ -17,3 +17,10 @@ class InMemoryCategoryRepository(CategoryRepository):
 
     async def list(self) -> List[Category]:
         return self.items
+
+    async def get(self, category_id: int) -> Category | None:
+        for item in self.items:
+            if item.id == category_id:
+                return item
+
+        return None

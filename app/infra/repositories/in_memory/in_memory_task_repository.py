@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import UUID4
 
@@ -13,7 +13,12 @@ class InMemoryTaskRepository(TaskRepository):
         self.items: List[Task] = []
 
     async def create(self, task: TaskCreate) -> Task:
-        task_db = Task(**task.model_dump(), id=uuid.uuid4(), created_at=datetime.now(), updated_at=datetime.now())
+        task_db = Task(
+            **task.model_dump(),
+            id=uuid.uuid4(),
+            created_at=datetime.now(),
+            updated_at=datetime.now()
+        )
         self.items.append(task_db)
 
         return task_db
@@ -44,10 +49,20 @@ class InMemoryTaskRepository(TaskRepository):
 
         return filtered_tasks
 
-    async def list_due_soon(self, user_id: UUID4, due_time_limit: datetime) -> List[Task]:
-        tasks = [item for item in self.items if item.user_id == user_id]
-
-        tasks_due_soon = [task for task in tasks if task.due_date and task.due_date <= due_time_limit]
+    async def list_due_soon(
+        self, due_time_limit: datetime, user_id: Optional[UUID4] = None
+    ) -> List[Task]:
+        tasks_due_soon = [
+            task
+            for task in self.items
+            if task.due_date
+            and task.due_date <= due_time_limit
+            and not task.is_completed
+        ]
+        if user_id:
+            tasks_due_soon = [
+                item for item in tasks_due_soon if item.user_id == user_id
+            ]
 
         return tasks_due_soon
 

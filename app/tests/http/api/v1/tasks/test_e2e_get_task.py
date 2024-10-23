@@ -18,7 +18,9 @@ from app.utils.tests.make_task import make_task, OverrideTask
 async def task(session: AsyncSession, category: Category, user: User) -> Task:
     repository = SQLAlchemyTaskRepository(session)
 
-    task = await repository.create(make_task(OverrideTask(user_id=user.id, category_id=category.id)))
+    task = await repository.create(
+        make_task(OverrideTask(user_id=user.id, category_id=category.id))
+    )
     return task
 
 
@@ -46,7 +48,9 @@ async def test_e2e_get_task_without_authentication(client: AsyncClient, task: Ta
 
 
 @pytest.mark.asyncio
-async def test_e2e_get_task_with_invalid_id(client: AsyncClient, bearer_token: str, task: Task):
+async def test_e2e_get_task_with_invalid_id(
+    client: AsyncClient, bearer_token: str, task: Task
+):
     response = await client.get(
         f"/api/v1/tasks/{uuid4().__str__()}",
         headers={"Authorization": f"Bearer {bearer_token}"},

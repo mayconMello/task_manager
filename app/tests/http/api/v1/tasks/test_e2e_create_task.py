@@ -26,7 +26,9 @@ async def payload(
 
 
 @pytest.mark.asyncio
-async def test_e2e_create_task(client: AsyncClient, payload: dict, bearer_token: str, user: User):
+async def test_e2e_create_task(
+    client: AsyncClient, payload: dict, bearer_token: str, user: User
+):
     response = await client.post(
         "/api/v1/tasks/",
         json=payload,
@@ -42,14 +44,18 @@ async def test_e2e_create_task(client: AsyncClient, payload: dict, bearer_token:
 
 
 @pytest.mark.asyncio
-async def test_e2e_create_task_without_token(client: AsyncClient, payload: dict, user: User):
+async def test_e2e_create_task_without_token(
+    client: AsyncClient, payload: dict, user: User
+):
     response = await client.post("/api/v1/tasks/", json=payload)
 
     assert response.status_code == 401
 
 
 @pytest.mark.asyncio
-async def test_e2e_create_task_without_title(client: AsyncClient, payload: dict, bearer_token: str, user: User):
+async def test_e2e_create_task_without_title(
+    client: AsyncClient, payload: dict, bearer_token: str, user: User
+):
     payload["title"] = None
     response = await client.post(
         "/api/v1/tasks/",
@@ -61,7 +67,9 @@ async def test_e2e_create_task_without_title(client: AsyncClient, payload: dict,
 
 
 @pytest.mark.asyncio
-async def test_e2e_create_task_with_invalid_title(client: AsyncClient, payload: dict, bearer_token: str, user: User):
+async def test_e2e_create_task_with_invalid_title(
+    client: AsyncClient, payload: dict, bearer_token: str, user: User
+):
     payload["title"] = "A" * 101
     response = await client.post(
         "/api/v1/tasks/",
@@ -73,7 +81,9 @@ async def test_e2e_create_task_with_invalid_title(client: AsyncClient, payload: 
 
 
 @pytest.mark.asyncio
-async def test_e2e_create_task_with_invalid_due_date(client: AsyncClient, payload: dict, bearer_token: str, user: User):
+async def test_e2e_create_task_with_invalid_due_date(
+    client: AsyncClient, payload: dict, bearer_token: str, user: User
+):
     payload["due_date"] = datetime.now().isoformat(timespec="seconds")
     response = await client.post(
         "/api/v1/tasks/",

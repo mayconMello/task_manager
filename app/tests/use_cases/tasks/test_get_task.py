@@ -40,7 +40,9 @@ async def user(repository_user: InMemoryUserRepository):
 
 
 @pytest.mark.asyncio
-async def test_get_task(repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User):
+async def test_get_task(
+    repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User
+):
     task_1 = await repository.create(
         make_task(
             OverrideTask(
@@ -59,7 +61,9 @@ async def test_get_task(repository: InMemoryTaskRepository, use_case: GetTaskUse
 
 
 @pytest.mark.asyncio
-async def test_get_task_with_invalid_task_id(repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User):
+async def test_get_task_with_invalid_task_id(
+    repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User
+):
     await repository.create(
         make_task(
             OverrideTask(
@@ -76,7 +80,9 @@ async def test_get_task_with_invalid_task_id(repository: InMemoryTaskRepository,
 
 
 @pytest.mark.asyncio
-async def test_get_task_with_invalid_user_id(repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User):
+async def test_get_task_with_invalid_user_id(
+    repository: InMemoryTaskRepository, use_case: GetTaskUseCase, user: User
+):
     task = await repository.create(
         make_task(
             OverrideTask(

@@ -31,12 +31,16 @@ async def payload(category) -> dict:
 async def task(session: AsyncSession, category: Category, user: User) -> Task:
     repository = SQLAlchemyTaskRepository(session)
 
-    task = await repository.create(make_task(OverrideTask(user_id=user.id, category_id=category.id)))
+    task = await repository.create(
+        make_task(OverrideTask(user_id=user.id, category_id=category.id))
+    )
     return task
 
 
 @pytest.mark.asyncio
-async def test_e2e_update_task(client: AsyncClient, bearer_token: str, task: Task, payload):
+async def test_e2e_update_task(
+    client: AsyncClient, bearer_token: str, task: Task, payload
+):
     response = await client.put(
         f"/api/v1/tasks/{task.id.__str__()}",
         headers={"Authorization": f"Bearer {bearer_token}"},
@@ -52,14 +56,18 @@ async def test_e2e_update_task(client: AsyncClient, bearer_token: str, task: Tas
 
 
 @pytest.mark.asyncio
-async def test_e2e_update_task_without_authentication(client: AsyncClient, task: Task, payload):
+async def test_e2e_update_task_without_authentication(
+    client: AsyncClient, task: Task, payload
+):
     response = await client.put(f"/api/v1/tasks/{task.id.__str__()}", json=payload)
 
     assert response.status_code == 401
 
 
 @pytest.mark.asyncio
-async def test_e2e_update_task_with_invalid_id(client: AsyncClient, bearer_token: str, task: Task, payload):
+async def test_e2e_update_task_with_invalid_id(
+    client: AsyncClient, bearer_token: str, task: Task, payload
+):
     response = await client.put(
         f"/api/v1/tasks/{uuid4().__str__()}",
         headers={"Authorization": f"Bearer {bearer_token}"},

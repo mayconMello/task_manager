@@ -16,8 +16,12 @@ from app.utils.tests.make_subtask import make_subtask, OverrideSubtask
 async def subtasks(session: AsyncSession, task: Task):
     repository = SQLAlchemySubtaskRepository(session)
 
-    await repository.create(make_subtask(OverrideSubtask(task_id=task.id.__str__(), title="Subtask 1")))
-    await repository.create(make_subtask(OverrideSubtask(task_id=task.id.__str__(), title="Subtask 2")))
+    await repository.create(
+        make_subtask(OverrideSubtask(task_id=task.id.__str__(), title="Subtask 1"))
+    )
+    await repository.create(
+        make_subtask(OverrideSubtask(task_id=task.id.__str__(), title="Subtask 2"))
+    )
 
 
 @pytest.mark.asyncio
@@ -54,7 +58,9 @@ async def test_e2e_list_subtasks_without_authentication(
 
 
 @pytest.mark.asyncio
-async def test_e2e_list_subtask_with_invalid_id(client: AsyncClient, bearer_token: str, task: Task, subtasks):
+async def test_e2e_list_subtask_with_invalid_id(
+    client: AsyncClient, bearer_token: str, task: Task, subtasks
+):
     response = await client.get(
         f"/api/v1/tasks/{uuid4().__str__()}/subtasks",
         headers={"Authorization": f"Bearer {bearer_token}"},

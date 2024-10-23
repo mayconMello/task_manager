@@ -9,23 +9,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
-    environment: Optional[Literal["dev", "prd", "test"]] = "dev"
+    ENVIRONMENT: Optional[Literal["development", "production", "test"]] = "development"
 
-    allowed_hosts: List[str] = ["localhost", "testserver"]
-    allowed_origins: List[str] = ["http://localhost"]
+    ALLOWED_HOTS: List[str] = ["localhost", "testserver"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost"]
 
-    secret_key: str
+    SECRET_KEY: str
 
-    storage_path: str = "media"
-    storage_url: str = "media"
-    max_file_size_bytes: int = 5 * 1024 * 1024
+    MEDIA_PATH: str = "media"
+    MEDIA_URL: str = "media"
 
-    database_url: str
-    database_url_test: str = None
+    MAX_FILE_SIZE_BYTES: int = 5 * 1024 * 1024
 
-    jwt_expires_token_in_minutes: int = 10
-    jwt_expires_refresh_token_in_days: int = 7
-    jwt_algorithm: str = "HS256"
+    DATABASE_URL: str
+    DATABASE_URL_TEST: str = None
+
+    JWT_EXPIRES_TOKEN_IN_MINUTES: int = 10
+    JWT_EXPIRES_REFRESH_TOKEN_IN_DAYS: int = 7
+    JWT_ALGORITHM: str = "HS256"
+
+    EMAIL_HOST: str = None
+    EMAIL_PORT: int = None
+    EMAIL_HOST_USER: str = None
+    EMAIL_HOST_PASSWORD: str = None
+
+    BROKER_HOST: str
+    BROKER_PORT: int
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -39,15 +48,15 @@ class Settings(BaseSettings):
     @computed_field
     @property
     def database(self) -> str:
-        if self.environment == "test":
-            return self.database_url_test
+        if self.ENVIRONMENT == "test":
+            return self.DATABASE_URL_TEST
 
-        return self.database_url
+        return self.DATABASE_URL
 
     @computed_field
     @property
     def storage_full_path(self) -> Path:
-        return BASE_DIR.joinpath(self.storage_path)
+        return BASE_DIR.joinpath(self.MEDIA_PATH)
 
 
 settings = Settings()

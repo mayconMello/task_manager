@@ -42,7 +42,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_create_subtask(repository: InMemorySubtaskRepository, use_case: CreateSubtaskUseCase, task):
+async def test_create_subtask(
+    repository: InMemorySubtaskRepository, use_case: CreateSubtaskUseCase, task
+):
     subtask = await use_case.execute(
         task.user_id,
         task.id,

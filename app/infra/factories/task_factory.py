@@ -18,6 +18,9 @@ from app.infra.repositories.sqlalchemy.sqlalchemy_task_repository import (
 from app.infra.repositories.sqlalchemy.sqlalchemy_user_repository import (
     SQLAlchemyUserRepository,
 )
+from app.infra.repositories.sqlalchemy.sqlalchemy_category_repository import (
+    SQLAlchemyCategoryRepository,
+)
 
 
 class TaskUseCaseFactory:
@@ -28,31 +31,48 @@ class TaskUseCaseFactory:
 
         return repository_task, repository_user
 
-    def create_task_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateTaskUseCase:
+    def create_task_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateTaskUseCase:
         repositories = self.repositories(session=session)
-        return CreateTaskUseCase(*repositories)
+        repository_category = SQLAlchemyCategoryRepository(session)
+        return CreateTaskUseCase(*repositories, repository_category=repository_category)
 
-    def list_tasks_use_case(self, session: AsyncSession = Depends(get_session)) -> ListTasksUseCase:
+    def list_tasks_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListTasksUseCase:
         repositories = self.repositories(session=session)
         return ListTasksUseCase(*repositories)
 
-    def list_tasks_due_soon_use_case(self, session: AsyncSession = Depends(get_session)) -> ListTasksDueSoonUseCase:
+    def list_tasks_due_soon_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> ListTasksDueSoonUseCase:
         repositories = self.repositories(session=session)
         return ListTasksDueSoonUseCase(*repositories)
 
-    def get_task_use_case(self, session: AsyncSession = Depends(get_session)) -> GetTaskUseCase:
+    def get_task_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> GetTaskUseCase:
         repositories = self.repositories(session=session)
         return GetTaskUseCase(*repositories)
 
-    def delete_task_use_case(self, session: AsyncSession = Depends(get_session)) -> DeleteTaskUseCase:
+    def delete_task_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> DeleteTaskUseCase:
         repositories = self.repositories(session=session)
         return DeleteTaskUseCase(*repositories)
 
-    def update_task_use_case(self, session: AsyncSession = Depends(get_session)) -> UpdateTaskUseCase:
+    def update_task_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> UpdateTaskUseCase:
         repositories = self.repositories(session)
         return UpdateTaskUseCase(*repositories)
 
-    def update_status_task_use_case(self, session: AsyncSession = Depends(get_session)) -> UpdateStatusTaskUseCase:
+    def update_status_task_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> UpdateStatusTaskUseCase:
         repositories = self.repositories(session)
         repository_subtask = SQLAlchemySubtaskRepository(session)
-        return UpdateStatusTaskUseCase(*repositories, repository_subtask=repository_subtask)
+        return UpdateStatusTaskUseCase(
+            *repositories, repository_subtask=repository_subtask
+        )

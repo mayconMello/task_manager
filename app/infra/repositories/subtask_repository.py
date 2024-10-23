@@ -24,7 +24,9 @@ class SubtaskRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def update(self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate) -> Subtask:
+    async def update(
+        self, task_id: UUID4, subtask_id: UUID4, subtask: SubtaskUpdate
+    ) -> Subtask:
         raise NotImplementedError
 
     @abstractmethod

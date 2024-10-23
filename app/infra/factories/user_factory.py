@@ -15,11 +15,17 @@ class UserFactory:
     def repository(session: AsyncSession) -> SQLAlchemyUserRepository:
         return SQLAlchemyUserRepository(session)
 
-    def create_user_use_case(self, session: AsyncSession = Depends(get_session)) -> CreateUserUseCase:
+    def create_user_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> CreateUserUseCase:
         return CreateUserUseCase(self.repository(session))
 
-    def get_user_by_id_use_case(self, session: AsyncSession = Depends(get_session)) -> GetUserByIdUseCase:
+    def get_user_by_id_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> GetUserByIdUseCase:
         return GetUserByIdUseCase(self.repository(session))
 
-    def authenticate_user_use_case(self, session: AsyncSession = Depends(get_session)) -> AuthenticateUseCase:
+    def authenticate_user_use_case(
+        self, session: AsyncSession = Depends(get_session)
+    ) -> AuthenticateUseCase:
         return AuthenticateUseCase(self.repository(session))

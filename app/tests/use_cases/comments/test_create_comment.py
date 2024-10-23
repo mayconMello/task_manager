@@ -41,7 +41,9 @@ async def task(
 
 
 @pytest.mark.asyncio
-async def test_create_comment(repository: InMemoryCommentRepository, use_case: CreateCommentUseCase, task):
+async def test_create_comment(
+    repository: InMemoryCommentRepository, use_case: CreateCommentUseCase, task
+):
     comment = await use_case.execute(
         task.user_id,
         task.id,

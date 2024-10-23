@@ -15,7 +15,9 @@ class CreateCommentUseCase:
         task = await self.repository_task.get(user_id, task_id)
 
         if not task:
-            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
+            raise ResourceNotFoundError(
+                "Task not found or you do not have permission to access this task."
+            )
 
         body.task_id = task_id
         body.user_id = user_id

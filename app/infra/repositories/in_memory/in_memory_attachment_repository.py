@@ -17,7 +17,9 @@ class InMemoryAttachmentRepository(AttachmentRepository):
         return attachment
 
     async def list(self, task_id: UUID4) -> List[Attachment]:
-        attachments = [attachment for attachment in self.items if attachment.task_id == task_id]
+        attachments = [
+            attachment for attachment in self.items if attachment.task_id == task_id
+        ]
 
         return attachments
 

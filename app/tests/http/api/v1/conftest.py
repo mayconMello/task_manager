@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.auth import get_password_hash
 from app.core.configs import settings
 from app.domain.entities.category import Category
-from app.infra.db.session import Session
+from app.infra.db.session import AsyncSessionLocal
 from app.infra.repositories.sqlalchemy.sqlalchemy_category_repository import (
     SQLAlchemyCategoryRepository,
 )
@@ -24,7 +24,7 @@ logging.disable(logging.WARNING)
 
 @pytest_asyncio.fixture(autouse=True, scope="function")
 async def setup_db_tear_down():
-    if settings.environment != "test":
+    if settings.ENVIRONMENT != "test":
         raise RuntimeError("Environment not set to 'test'")
 
     config = Config("alembic.ini")
@@ -37,13 +37,15 @@ async def setup_db_tear_down():
 
 @pytest_asyncio.fixture(autouse=True, scope="function")
 async def client(setup_db_tear_down):
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://testserver"
+    ) as client:
         yield client
 
 
 @pytest_asyncio.fixture
 async def session():
-    async with Session() as session:
+    async with AsyncSessionLocal() as session:
         yield session
 
 
@@ -67,7 +69,9 @@ async def user(session: AsyncSession):
 
 @pytest_asyncio.fixture
 async def bearer_token(client: AsyncClient, user):
-    response = await client.post("/api/v1/sessions/", json={"email": user.email, "password": "ABC123456"})
+    response = await client.post(
+        "/api/v1/sessions/", json={"email": user.email, "password": "ABC123456"}
+    )
 
     data = response.json()
     token = data["access_token"]

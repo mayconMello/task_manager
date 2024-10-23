@@ -26,14 +26,16 @@ class CreateAttachmentUseCase:
         task = await self.repository_task.get(user_id, task_id)
 
         if not task:
-            raise ResourceNotFoundError("Task not found or you do not have permission to access this task.")
+            raise ResourceNotFoundError(
+                "Task not found or you do not have permission to access this task."
+            )
 
-        if file.size > settings.max_file_size_bytes:
+        if file.size > settings.MAX_FILE_SIZE_BYTES:
             raise MaxFileSizeError()
 
         extention = Path(file.filename).suffix
         filename = f"{str(uuid4())}{extention}"
-        file_path = os.path.join(settings.storage_path, filename)
+        file_path = os.path.join(settings.MEDIA_PATH, filename)
 
         with open(file_path, "wb") as f:
             f.write(await file.read())
